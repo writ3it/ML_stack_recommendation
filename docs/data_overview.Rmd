@@ -1,0 +1,89 @@
+---
+title: "Data overview"
+author: "writ3it"
+date: "10 lutego 2019"
+output: 
+  html_document: 
+    highlight: kate
+    number_sections: yes
+    theme: cosmo
+    toc: yes
+---
+
+```{r setup,message=FALSE}
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(ggpubr)
+knitr::opts_chunk$set(echo = TRUE)
+set.seed(23)
+
+dataset <- read.table('./data.csv', header=FALSE, sep=';', quote="\"",skip=1)
+```
+
+# Przykładowy zbiór danych
+
+Zbiór danych pochodzi z ankiety przeprowadzonej wśród uczestników grup tematycznych PHPers (72% ankietowanych) oraz Ruby (24% ankietowanych). Pozostali dowiedzieli się o ankiecie przez znajomych. Zbiór zawiera 24 odpowiedzi co nie nadaje dużej wartości statystycznej. Z racji charakteru projektu, będzie jednak odpowiedni. Ankieta została wykonana niezbyt dokładnie, warto by zrobić ją lepiej dla zbioru produkcyjnego.
+
+# Przetwarzanie danych, statystyki
+## Lokalizacja pracodawcy
+```{r V3}
+levels(dataset$V3)
+dataset$V3 <- "Polska"
+```
+``` {r converter, echo=FALSE}
+convert2buckets <- function(lines){
+  new_lines <- lapply(lines, function(line){ 
+    return(strsplit(line,","))
+    })
+  techs <- lapply(unlist(new_lines),trimws)
+  techs <- sort(tolower(unique(unlist(techs))))
+  
+  binarize <- function (row_to_process,techs){
+    row_to_process <- lapply(unlist(row_to_process), function(foo){ tolower(trimws(foo))})
+    row <- c()
+    for(tech in techs){
+          row<-c(row,tech %in% row_to_process)
+    }
+  
+    return(row)
+  }
+  
+  
+  buckets<-lapply(new_lines,function(line){
+    return (binarize(line, techs))
+  })
+  bt <- as.data.frame(t(as.data.frame(buckets)))
+  colnames(bt) <- techs
+  rownames(bt) <- seq(1,nrow(bt))
+  return(bt)
+}
+```
+## Technologie
+``` {r V28}
+#levels(dataset$V28)
+lines <- dataset %>% select(V28) %>% mutate(V28 = gsub('(\\([^\\)]+\\))',"",V28, perl=TRUE)) %>% as.list
+bt <- convert2buckets(lines$V28)
+summary(bt)
+```
+## Technologie, propozycje ankietowanych
+```{r V29}
+lines <- dataset %>% select(V29) %>% mutate(V29 = gsub('(\\([^\\)]+\\))',"",V29, perl=TRUE)) %>% as.list
+bt <- convert2buckets(lines$V29)
+summary(bt)
+```
+## Histogramy Wiek, Pensja, Stanowisko, Wojewódtzwo
+```{r V5}
+Wiek<-ggplot(dataset, aes(x=V5)) +  geom_bar() + xlab("Wiek") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+Pensja<-ggplot(dataset, aes(x=V8)) +  geom_bar() + xlab("Pensja") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+Stanowisko<-ggplot(dataset, aes(x=V7)) +  geom_bar() + xlab("Stanowisko") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+Wojewodtzwo<-ggplot(dataset, aes(x=V4)) +  geom_bar() + xlab("Wojewodtzwo") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggarrange(Wiek, Pensja,Stanowisko,Wojewodtzwo)
+```
+
+## Wykształcenie, Testy
+```{r V10}
+Wyksztalcenie<-ggplot(dataset, aes(x=V23)) +  geom_bar() + xlab("Wyksztalcenie") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+Testy<-ggplot(dataset, aes(x=V27)) +  geom_bar() + xlab("Testy") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ggarrange(Wyksztalcenie,Testy)
+```
