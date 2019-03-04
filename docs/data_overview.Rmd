@@ -15,9 +15,9 @@ library(dplyr)
 library(ggplot2)
 library(tidyr)
 library(ggpubr)
+library(reshape2)
 knitr::opts_chunk$set(echo = TRUE)
 set.seed(23)
-
 dataset <- read.table('./data.csv', header=FALSE, sep=';', quote="\"",skip=1)
 ```
 
@@ -37,7 +37,7 @@ convert2buckets <- function(lines){
     return(strsplit(line,","))
     })
   techs <- lapply(unlist(new_lines),trimws)
-  techs <- sort(tolower(unique(unlist(techs))))
+  techs <- sort(unique(tolower(unlist(techs))))
   
   binarize <- function (row_to_process,techs){
     row_to_process <- lapply(unlist(row_to_process), function(foo){ tolower(trimws(foo))})
@@ -58,19 +58,24 @@ convert2buckets <- function(lines){
   rownames(bt) <- seq(1,nrow(bt))
   return(bt)
 }
+bucketPlot <- function(bt){
+  foo <- bt %>% summarise_each(funs(sum(.==1)))
+  foo <- melt(foo) %>% transform(variable=reorder(variable, -value))
+  ggplot(foo, aes(variable, value)) +  geom_bar(stat = "identity") + xlab("Testy") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+}
 ```
 ## Technologie
 ``` {r V28}
-#levels(dataset$V28)
+
 lines <- dataset %>% select(V28) %>% mutate(V28 = gsub('(\\([^\\)]+\\))',"",V28, perl=TRUE)) %>% as.list
 bt <- convert2buckets(lines$V28)
-summary(bt)
+bucketPlot(bt)
 ```
 ## Technologie, propozycje ankietowanych
 ```{r V29}
 lines <- dataset %>% select(V29) %>% mutate(V29 = gsub('(\\([^\\)]+\\))',"",V29, perl=TRUE)) %>% as.list
 bt <- convert2buckets(lines$V29)
-summary(bt)
+bucketPlot(bt)
 ```
 ## Histogramy Wiek, Pensja, Stanowisko, Wojewódtzwo
 ```{r V5}
