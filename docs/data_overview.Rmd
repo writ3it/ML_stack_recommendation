@@ -11,7 +11,7 @@ output:
     toc_float: true
 ---
 
-```{r setup,message=FALSE}
+```{r setup,message=FALSE, echo=FALSE}
 library(dplyr)
 library(ggplot2)
 library(tidyr)
