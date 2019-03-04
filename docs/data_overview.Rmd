@@ -17,7 +17,7 @@ library(ggplot2)
 library(tidyr)
 library(ggpubr)
 library(reshape2)
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, messages=FALSE, warning=FALSE)
 set.seed(23)
 dataset <- read.table('./data.csv', header=FALSE, sep=';', quote="\"",skip=1)
 ```
@@ -28,7 +28,8 @@ Zbiór danych pochodzi z ankiety przeprowadzonej wśród uczestników grup temat
 
 # Przetwarzanie danych, statystyki
 ## Lokalizacja pracodawcy
-```{r V3}
+Odpowiedzi udzielone przez ankietowanych. Zostaną ujednolicone do słowa "Polska".
+```{r V3, echo=FALSE}
 levels(dataset$V3)
 dataset$V3 <- "Polska"
 ```
@@ -59,36 +60,38 @@ convert2buckets <- function(lines){
   rownames(bt) <- seq(1,nrow(bt))
   return(bt)
 }
-bucketPlot <- function(bt){
+bucketPlot <- function(bt,x){
   foo <- bt %>% summarise_each(funs(sum(.==1)))
   foo <- melt(foo) %>% transform(variable=reorder(variable, -value))
-  ggplot(foo, aes(variable, value)) +  geom_bar(stat = "identity") + xlab("Testy") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  ggplot(foo, aes(variable, value)) +  geom_bar(stat = "identity") + xlab(x) + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 }
 ```
-## Technologie
-``` {r V28}
 
+## Technologie
+``` {r V28, warning=FALSE, message=FALSE, echo=FALSE}
 lines <- dataset %>% select(V28) %>% mutate(V28 = gsub('(\\([^\\)]+\\))',"",V28, perl=TRUE)) %>% as.list
 bt <- convert2buckets(lines$V28)
-bucketPlot(bt)
+bucketPlot(bt,"Technologia")
 ```
+
 ## Technologie, propozycje ankietowanych
-```{r V29}
+```{r V29, warning=FALSE, message=FALSE,echo=FALSE}
 lines <- dataset %>% select(V29) %>% mutate(V29 = gsub('(\\([^\\)]+\\))',"",V29, perl=TRUE)) %>% as.list
 bt <- convert2buckets(lines$V29)
-bucketPlot(bt)
+bucketPlot(bt,"Technologia")
 ```
-## Histogramy Wiek, Pensja, Stanowisko, Wojewódtzwo
-```{r V5}
+
+## Histogramy Wiek, Pensja, Stanowisko, Województwo
+```{r V5, echo=FALSE}
 Wiek<-ggplot(dataset, aes(x=V5)) +  geom_bar() + xlab("Wiek") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 Pensja<-ggplot(dataset, aes(x=V8)) +  geom_bar() + xlab("Pensja") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 Stanowisko<-ggplot(dataset, aes(x=V7)) +  geom_bar() + xlab("Stanowisko") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
-Wojewodtzwo<-ggplot(dataset, aes(x=V4)) +  geom_bar() + xlab("Wojewodtzwo") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+Wojewodtzwo<-ggplot(dataset, aes(x=V4)) +  geom_bar() + xlab("Wojewodztwo") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ggarrange(Wiek, Pensja,Stanowisko,Wojewodtzwo)
 ```
 
 ## Wykształcenie, Testy
-```{r V10}
+```{r V10, echo=FALSE}
 Wyksztalcenie<-ggplot(dataset, aes(x=V23)) +  geom_bar() + xlab("Wyksztalcenie") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 Testy<-ggplot(dataset, aes(x=V27)) +  geom_bar() + xlab("Testy") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ggarrange(Wyksztalcenie,Testy)
