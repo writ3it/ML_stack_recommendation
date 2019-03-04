@@ -17,6 +17,7 @@ library(ggplot2)
 library(tidyr)
 library(ggpubr)
 library(reshape2)
+library(plotly)
 knitr::opts_chunk$set(echo = TRUE, messages=FALSE, warning=FALSE)
 set.seed(23)
 dataset <- read.table('./data.csv', header=FALSE, sep=';', quote="\"",skip=1)
@@ -62,8 +63,11 @@ convert2buckets <- function(lines){
 }
 bucketPlot <- function(bt,x,y){
   foo <- bt %>% summarise_each(funs(sum(.==1)))
-  foo <- melt(foo) %>% transform(variable=reorder(variable, -value))
-  ggplot(foo, aes(variable, value)) +  geom_bar(stat = "identity") + xlab(x)+ylab(y) + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  ?reorder
+  foo <- melt(foo) %>% transform(variable=reorder(variable, value))
+  p<-ggplot(foo, aes(variable, value)) +  geom_bar(stat = "identity") + xlab(x)+ylab(y) + theme(axis.text.y = element_text(hjust = 1, size=10)) + coord_flip()
+  ggplotly(p, height=1000)
+      
 }
 ```
 
@@ -84,7 +88,12 @@ bucketPlot(bt,"Technologia","Liczba osób")
 ## Histogramy Wiek, Pensja, Stanowisko, Województwo
 ```{r V5, echo=FALSE}
 Wiek<-ggplot(dataset, aes(x=V5)) +  geom_bar() + xlab("Wiek") + ylab("Liczba osób") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Wiek programisty")
-Pensja<-ggplot(dataset, aes(x=V8)) +  geom_bar() + xlab("Pensja") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("Liczba osób") + ggtitle("Pensja programisty netto/msc")
+
+
+labels <- c("500-1000 zł","1000 - 2000 zł","2000 - 3000 zł","3001 - 3500 zł","3501 - 4500 zł","4501 - 5500 zł","5501 - 6500 zł","6501 - 7500 zł","7501 - 8500 zł", "8501 - 9500 zł","9501 - 10500 zł","10501 - 12501 zł","12501 - 14 500 zł","14501 - 16000 zł","16001 - 20000 zł","20 - 100 k zł","Ponad 100 k zł", "")
+vals <- match(dataset$V8,labels)
+foo <- dataset %>% transform(V8=reorder(V8, vals)) %>% mutate(V8 = replace(V8,V8=="",'Brak odpowiedzi'))
+Pensja<-ggplot(foo, aes(x=V8)) +  geom_bar() + xlab("Pensja") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("Liczba osób") + ggtitle("Pensja programisty netto/msc")
 Stanowisko<-ggplot(dataset, aes(x=V7)) +  geom_bar() + xlab("Stanowisko") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("Liczba osób") + ggtitle("Stanowisko")
 Wojewodtzwo<-ggplot(dataset, aes(x=V4)) +  geom_bar() + xlab("Wojewodztwo") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("Liczba osób") + ggtitle("Województwo - oddział pracodawcy")
 ggarrange(Wiek, Pensja,Stanowisko,Wojewodtzwo)
