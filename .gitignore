@@ -62,6 +62,11 @@ typings/
 
 #webstorm
 ui/.idea/*
+server/.idea/*
 
 #data
 *.csv
+.Rproj.user
+
+docs/.RData
+docs/.Rhistory
