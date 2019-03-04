@@ -13,5 +13,8 @@ module.exports = {
         quasar: {
             theme: 'mat'
         }
-    }
+    },
+    publicPath: process.env.NODE_ENV === 'production'
+        ? './'
+        : '/'
 }
