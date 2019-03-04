@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE, messages=FALSE, warning=FALSE)
 set.seed(23)
 dataset <- read.table('./data.csv', header=FALSE, sep=';', quote="\"",skip=1)
 ```
-
+ 
 # Przykładowy zbiór danych
 
 Zbiór danych pochodzi z ankiety przeprowadzonej wśród uczestników grup tematycznych PHPers (72% ankietowanych) oraz Ruby (24% ankietowanych). Pozostali dowiedzieli się o ankiecie przez znajomych. Zbiór zawiera 24 odpowiedzi co nie nadaje dużej wartości statystycznej. Z racji charakteru projektu, będzie jednak odpowiedni. Ankieta została wykonana niezbyt dokładnie, warto by zrobić ją lepiej dla zbioru produkcyjnego.
