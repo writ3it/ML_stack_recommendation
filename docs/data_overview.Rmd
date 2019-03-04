@@ -60,10 +60,10 @@ convert2buckets <- function(lines){
   rownames(bt) <- seq(1,nrow(bt))
   return(bt)
 }
-bucketPlot <- function(bt,x){
+bucketPlot <- function(bt,x,y){
   foo <- bt %>% summarise_each(funs(sum(.==1)))
   foo <- melt(foo) %>% transform(variable=reorder(variable, -value))
-  ggplot(foo, aes(variable, value)) +  geom_bar(stat = "identity") + xlab(x) + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  ggplot(foo, aes(variable, value)) +  geom_bar(stat = "identity") + xlab(x)+ylab(y) + theme(axis.text.x = element_text(angle = 90, hjust = 1))
 }
 ```
 
@@ -71,28 +71,28 @@ bucketPlot <- function(bt,x){
 ``` {r V28, warning=FALSE, message=FALSE, echo=FALSE}
 lines <- dataset %>% select(V28) %>% mutate(V28 = gsub('(\\([^\\)]+\\))',"",V28, perl=TRUE)) %>% as.list
 bt <- convert2buckets(lines$V28)
-bucketPlot(bt,"Technologia")
+bucketPlot(bt,"Technologia","Liczba osób")
 ```
 
 ## Technologie, propozycje ankietowanych
 ```{r V29, warning=FALSE, message=FALSE,echo=FALSE}
 lines <- dataset %>% select(V29) %>% mutate(V29 = gsub('(\\([^\\)]+\\))',"",V29, perl=TRUE)) %>% as.list
 bt <- convert2buckets(lines$V29)
-bucketPlot(bt,"Technologia")
+bucketPlot(bt,"Technologia","Liczba osób")
 ```
 
 ## Histogramy Wiek, Pensja, Stanowisko, Województwo
 ```{r V5, echo=FALSE}
-Wiek<-ggplot(dataset, aes(x=V5)) +  geom_bar() + xlab("Wiek") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
-Pensja<-ggplot(dataset, aes(x=V8)) +  geom_bar() + xlab("Pensja") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
-Stanowisko<-ggplot(dataset, aes(x=V7)) +  geom_bar() + xlab("Stanowisko") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
-Wojewodtzwo<-ggplot(dataset, aes(x=V4)) +  geom_bar() + xlab("Wojewodztwo") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+Wiek<-ggplot(dataset, aes(x=V5)) +  geom_bar() + xlab("Wiek") + ylab("Liczba osób") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Wiek programisty")
+Pensja<-ggplot(dataset, aes(x=V8)) +  geom_bar() + xlab("Pensja") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("Liczba osób") + ggtitle("Pensja programisty netto/msc")
+Stanowisko<-ggplot(dataset, aes(x=V7)) +  geom_bar() + xlab("Stanowisko") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("Liczba osób") + ggtitle("Stanowisko")
+Wojewodtzwo<-ggplot(dataset, aes(x=V4)) +  geom_bar() + xlab("Wojewodztwo") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ylab("Liczba osób") + ggtitle("Województwo - oddział pracodawcy")
 ggarrange(Wiek, Pensja,Stanowisko,Wojewodtzwo)
 ```
 
 ## Wykształcenie, Testy
 ```{r V10, echo=FALSE}
-Wyksztalcenie<-ggplot(dataset, aes(x=V23)) +  geom_bar() + xlab("Wyksztalcenie") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
-Testy<-ggplot(dataset, aes(x=V27)) +  geom_bar() + xlab("Testy") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+Wyksztalcenie<-ggplot(dataset, aes(x=V23)) +  geom_bar() + xlab("Wyksztalcenie") +ylab("Liczba osób") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Wykształcenie 'szkolne'")
+Testy<-ggplot(dataset, aes(x=V27)) +  geom_bar() + xlab("Testy") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Stosowanie TDD") + ylab("Liczba osób")
 ggarrange(Wyksztalcenie,Testy)
 ```
