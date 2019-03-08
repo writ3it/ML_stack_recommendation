@@ -274,7 +274,7 @@ export const polishDistricts = [
 export const levels = [
     'Intern',
     'Junior',
-    'Mid',
+    'Regular',
     'Senior'
 ];
 

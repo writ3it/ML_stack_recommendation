@@ -1,7 +1,14 @@
 <template>
-  <div id="app">
-    <RecommendationForm msg="Rekomendacje IT"/>
-  </div>
+  <v-app dark>
+
+    <v-content>
+      <v-container fluid>
+        <v-flex xs12 sm4 offset-sm4>
+          <RecommendationForm msg="Rekomendacje IT"/>
+        </v-flex>
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
@@ -16,11 +23,19 @@ export default {
 </script>
 
 <style>
-  body{
-    background: url(./assets/bg.jpg);
-    background-size:cover;
-    background-attachment: fixed;
-    background-position: center bottom;
+  .v-content{
+    background: url(./assets/bg.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    border-sizing:border-box;
+  }
+  html, body{
+    width:100%;
+    padding:0px;
+    margin:0px;
+    overflow-x:hidden;
   }
 
 </style>
