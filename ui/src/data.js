@@ -287,7 +287,6 @@ export const reviews = [
 ];
 
 export const positions = [
-    'Inne',
     'Backend developer',
     'Full-stack developer',
     'Front-end developer',
@@ -296,13 +295,50 @@ export const positions = [
     'Database administrator',
     'Designer',
     'System administrator',
-    'Buissness Analyst etc'
+    'Buissness Analyst etc',
+    'Inne'
 ];
+
+var times = [];
+
+export const freeTimeHabits = [
+    "Sport",
+    "Filmy",
+    "Strzelectwo",
+    "Podróże",
+    "Imprezy",
+    "Gry",
+    "Elektronika",
+    "Wystąpienia publiczne",
+    "Gokarty",
+    "Rodzina",
+    "Mechanika samochodowa",
+    "Uczę się",
+    "Programuję dalej"
+];
+
+export const activities = [
+    "Grupa na FB",
+    "Forum tematyczne",
+    "Stackoverflow",
+    "Programistyczny slack/discord",
+    "Prowadzę projekt opensource",
+    "Organizuję meetupy",
+    "Chodzę na meetupy",
+    "Występuję na meetupach",
+    "Hackathon"
+];
+
+for (let i = 0; i<=20; i+=3){
+    times.push(i +' - '+ (i+2)+' h');
+}
+
+export const timesWithComputer = times;
 
 
 var _sallaries = [];
 var dt = 1000;
-for (var i = 500; i<60000; i+= dt){
+for (let i = 500; i<60000; i+= dt){
     _sallaries.push(i+' - '+(i+dt-1)+' zł');
 }
 _sallaries.push('Ponad 60k zł');

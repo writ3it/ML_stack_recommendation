@@ -15,8 +15,7 @@
                                       label="Jak często bywasz na rozmowie rekrutacyjnej?"></v-select>
                         </v-flex>
                         <v-flex sm12>
-                            <v-slider v-model="sliders.age" @change="selected.age = ages[sliders.age]" :min="0"
-                                      :max="ages.length-1" :label="selected.age" ticks="true"></v-slider>
+                            <v-select v-model="selected.age" :items="ages" label="Ile masz lat?"></v-select>
                         </v-flex>
                     </v-layout>
                 </v-stepper-content>
@@ -35,8 +34,7 @@
                                             label="Gdzie programujesz? (lokalizacja oddziału pracodawcy)"></v-autocomplete>
                         </v-flex>
                         <v-flex sm12>
-                            <v-slider v-model="sliders.level" @change="selected.level = data.levels[sliders.level]" :min="0"
-                                      :max="data.levels.length-1" :label="selected.level" ticks="true"></v-slider>
+                            <v-select v-model="selected.level" :items="data.levels" label="Twoje obecne stanowisko?"></v-select>
                         </v-flex>
                         <v-flex sm12>
                             <v-radio-group v-model="selected.position" label="Twoje stanowisko">
@@ -51,11 +49,38 @@
                         <v-flex v-if="selected.position=='Inne'">
                             <v-text-field label="Inne stanowisko - jakie?" v-model="selected.otherPosition"></v-text-field>
                         </v-flex>
-                        <v-flex sm12>
+                        <v-flex md12 hidden-sm-and-down>
                             <v-slider v-model="sliders.sallary" @change="selected.sallary = data.sallaries[sliders.sallary]" :min="0"
-                                      :max="data.sallaries.length-1" :label="selected.sallary" ticks="true"></v-slider>
+                                      :max="data.sallaries.length-1" :label="selected.sallary" ticks></v-slider>
+                        </v-flex>
+                        <v-flex md12 hidden-md-and-up>
+                            <v-select v-model="selected.sallary" :items="data.sallaries" label="Zarobki (za etat, netto) / msc"></v-select>
                         </v-flex>
                     </v-layout>
+                </v-stepper-content>
+                <v-stepper-step step="3" :complete="step>3">
+                    <span @click="step = 3" class="selector">Zwyczaje</span>
+                </v-stepper-step>
+                <v-stepper-content step="3">
+                    <v-flex md12 hidden-sm-and-down>
+                        <label>Ile czasu dziennie spędzasz przed komputerem?</label>
+                        <v-slider v-model="sliders.spentTime" @change="selected.spentTime = data.timesWithComputer[sliders.spentTime]" :min="0"
+                                  :max="data.timesWithComputer.length-1" :label="selected.spentTime" ticks ></v-slider>
+                    </v-flex>
+                    <v-flex md12 hidden-md-and-up>
+                        <v-select v-model="selected.spentTime" :items="data.timesWithComputer" label="Ile czasu dziennie spędzasz przed komputerem?"></v-select>
+                    </v-flex>
+                    <v-flex md12>
+                        <v-text-field
+                                label="Github/Bitbucket login" v-model="selected.github"
+                        ></v-text-field>
+                    </v-flex>
+                    <v-flex md12>
+                        <v-combobox v-model="selected.freeTimeHabits" :items="data.freeTimeHabits" label="Co robisz w wolnym czasie?" chips multiple deletable-chips/>
+                    </v-flex>
+                    <v-flex md12>
+                        <v-combobox v-model="selected.activities" :items="data.activities" label="Co udzielasz się poza pracą?" chips multiple deletable-chips/>
+                    </v-flex>
                 </v-stepper-content>
 
 
@@ -78,6 +103,7 @@
 </style>
 <script>
     import * as data from "../data";
+
     var ages = (function () {
         var output = [];
         for (var i = 20; i < 60; i += 5) {
@@ -95,7 +121,8 @@
             sliders:{
                 age:1,
                 level:1,
-                sallary:1
+                sallary:1,
+                spentTime:1
             },
             selected: {
                 country: "Polska",
@@ -104,7 +131,11 @@
                 level: data.levels[1],
                 position: "",
                 otherPosition: "",
-                sallary: data.sallaries[1]
+                sallary: data.sallaries[1],
+                spentTime:"",
+                github:"",
+                freeTimeHabits:[],
+                activities:[]
             },
             data: data,
             ages: ages
