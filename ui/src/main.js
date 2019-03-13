@@ -1,13 +1,18 @@
 import Vue from 'vue'
-
+import VueAnalytics from 'vue-analytics'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import vSelect from 'vue-select'
 
-Vue.use(Vuetify);
-Vue.component('v-select2', vSelect)
-import App from './App.vue'
+import GA_ID from './analytic'
 
+Vue.use(Vuetify);
+Vue.use(VueAnalytics, {
+    id: GA_ID
+});
+Vue.component('v-select2', vSelect);
+
+import App from './App.vue'
 
 Vue.config.productionTip = false;
 

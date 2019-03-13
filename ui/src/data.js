@@ -299,7 +299,6 @@ export const positions = [
     'Inne'
 ];
 
-var times = [];
 
 export const freeTimeHabits = [
     "Sport",
@@ -329,11 +328,144 @@ export const activities = [
     "Hackathon"
 ];
 
+export const articles = [
+    "kilka w miesiącu",
+    "kilka w tygodniu",
+    "kilka dziennie",
+    "nie czytam"
+];
+
+export const mentor = [
+    "Tak, w tej samej firmie",
+    "Tak, znajomy itp.",
+    "Tak, blogger/vlogger itp.",
+    "Nie mam mentora"
+];
+
+export const studies = [
+    "Zaocznie",
+    "Dziennie",
+    "Nie"
+];
+
+export const schools = [
+    "Stopień doktora",
+    "Magister",
+    "Inżynier",
+    "Licencjat",
+    "Ukończone liceum (bez studiów)",
+    "Ukończone technikum (bez studiów)",
+    "Ukończona szkoła zawodowa (bez studiów)"
+];
+
+export const otherEdu = [
+    "Akademia C#",
+    "Zend Certification Program",
+    "Open suse Linux server administration",
+    "Microsoft ITA",
+    "Kurs RoR",
+    "Kurs ES6",
+    "Kurs React/Redux",
+    "Studia podyplomowe (IT)",
+    "Studia podyplomowe (poza IT)",
+    "Laracast",
+    "Pasja Informatyki (kanał na YT)",
+    "Kurs niebezpiecznika",
+    "Czysty kod"
+];
+
+export const tdd = [
+    "Stosuję TDD",
+    "Staram się TDD",
+    "Piszę testy ale nie w TDD",
+    "Nie piszę testów"
+];
+
+export const tech = [
+    "git",
+    "myssql",
+    "rest api",
+    "php",
+    "linux",
+    "github/bitbucket",
+    "stackoverflow <3",
+    "html",
+    "docker",
+    "bootstrap",
+    "phpstorm",
+    "slack",
+    "nginx",
+    "JavaScript",
+    "CSS",
+    "PostgreSQL",
+    "Symfony",
+    "SCRUM",
+    "NodeJS",
+    "JIRA",
+    "BASH",
+    "phpunit",
+    "Confluence",
+    "Redis",
+    "Angluar",
+    "Visual Studio Code",
+    "TypeScript",
+    "RabbitMQ",
+    "Apache HTTP Server",
+    "Laravel",
+    "Redmine",
+    "MongoDB",
+    "mikroserwisy",
+    "Wordpress",
+    "Windows",
+    "VueJS",
+    "React",
+    "Materialize",
+    "MacOS",
+    "Jenkins",
+    "Intellij",
+    "Webstorm",
+    "CakePHP",
+    "Ruby on Rails",
+    "Ruby",
+    "Python",
+    "NetBeans",
+    "MSSQL",
+    "Bitbucket pipelines",
+    "Zend Framework",
+    "Adobe Photoshop",
+    "Magento",
+    "Joomla",
+    "JavaEE",
+    "GraphQL",
+    "C++",
+    "C#",
+    "Woocommerce",
+    "Visual Studio IDE",
+    "Spring",
+    "Sonar Cube",
+    "iOS",
+    "Adobe Illustrator",
+    "Go",
+    "Eclipse",
+    "Drupal",
+    "Codeigniter",
+    "Cassandra",
+    "C"
+];
+
+var times = [];
 for (let i = 0; i<=20; i+=3){
     times.push(i +' - '+ (i+2)+' h');
 }
 
 export const timesWithComputer = times;
+
+times = [];
+for (let i = 0; i<=27; i+=3){
+    times.push(i +' - '+ (i+2)+' lat');
+}
+times.push("30+");
+export const jobExperience = times;
 
 
 var _sallaries = [];
