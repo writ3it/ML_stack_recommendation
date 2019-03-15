@@ -11,9 +11,15 @@ App that generates reports which contains personal recommendations of technology
 
 ## About app development
 
-#### Used technologies
-- vuejs2
+#### Used technologies and tools
+- [Vue.js](https://vuejs.org/)
+- [Vuetify](https://vuetifyjs.com/en/)
+- [Slim, a micro framework for PHP](http://www.slimframework.com/)
+- [PHPUnit](https://phpunit.de/)
+- [WebStorm](https://www.jetbrains.com/webstorm/)
+- [PhpStorm](https://www.jetbrains.com/phpstorm/)
+- [Rmarkdown](https://rmarkdown.rstudio.com/)
+- [Composer](https://getcomposer.org/)
 
 #### To do
-- server-side logic
-- form validation
+[See issues](https://github.com/writ3it/ML_stack_recommendation/issues)
