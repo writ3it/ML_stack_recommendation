@@ -5,8 +5,6 @@ use Slim\Http\Response;
 
 use ITR\API;
 
-// Routes
-
 $app->get('/', function (Request $request, Response $response, array $args) {
     // Sample log message
     $this->logger->info("Slim-Skeleton '/' route");
@@ -26,4 +24,10 @@ $app->get('/api/{version}/{module}/{resource}', function (Request $request, Resp
     $requestData = $request->getParsedBody() ?? [];
     $data = $api->UseVersion($version)->UseModule($module)->UseResource($resource)->Serve($requestData);
     return $response->withJson($data, $api->GetStatusCode());
+});
+
+
+$app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($req, $res) {
+    $handler = $this->notFoundHandler; // handle using the default Slim page not found handler
+    return $handler($req, $res);
 });

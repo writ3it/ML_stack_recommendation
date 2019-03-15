@@ -3,10 +3,12 @@ import VueAnalytics from 'vue-analytics'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import vSelect from 'vue-select'
+import VueResources from 'vue-resource'
 
 import GA_ID from './analytic'
 
 Vue.use(Vuetify);
+Vue.use(VueResources);
 Vue.use(VueAnalytics, {
     id: GA_ID
 });

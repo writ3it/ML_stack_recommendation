@@ -22,7 +22,7 @@ class FormData implements IResource
             'countries' => $this->load_data('countries'),
             'activities' => $this->load_data('activities'),
             'articles' => $this->load_data('articles_reading'),
-            'employee_reviews' => $this->load_data('employee_reviews'),
+            'reviews' => $this->load_data('employee_reviews'),
             'freeTimeHabits' => $this->load_data('free_time_habits'),
             'levels' => $this->load_data('job_levels'),
             'positions' => $this->load_data('job_positions'),

@@ -67,11 +67,7 @@
                         <v-flex v-if="selected.position=='Inne'">
                             <v-text-field label="Inne stanowisko - jakie?" v-model="selected.otherPosition"></v-text-field>
                         </v-flex>
-                        <v-flex md12 hidden-sm-and-down>
-                            <v-slider v-model="sliders.sallary" @change="selected.sallary = data.sallaries[sliders.sallary]" :min="0"
-                                      :max="data.sallaries.length-1" :label="selected.sallary" ticks></v-slider>
-                        </v-flex>
-                        <v-flex md12 hidden-md-and-up>
+                        <v-flex>
                             <v-select v-model="selected.sallary" :items="data.sallaries" label="Zarobki (za etat, netto) / msc"></v-select>
                         </v-flex>
                     </v-layout>
@@ -80,12 +76,8 @@
                     <span @click="step = 3" class="selector">Zwyczaje</span>
                 </v-stepper-step>
                 <v-stepper-content step="3">
-                    <v-flex md12 hidden-sm-and-down>
-                        <label>Ile czasu dziennie spędzasz przed komputerem?</label>
-                        <v-slider v-model="sliders.spentTime" @change="selected.spentTime = data.timesWithComputer[sliders.spentTime]" :min="0"
-                                  :max="data.timesWithComputer.length-1" :label="selected.spentTime" ticks ></v-slider>
-                    </v-flex>
-                    <v-flex md12 hidden-md-and-up>
+
+                    <v-flex>
                         <v-select v-model="selected.spentTime" :items="data.timesWithComputer" label="Ile czasu dziennie spędzasz przed komputerem?"></v-select>
                     </v-flex>
                     <v-flex md12>
@@ -105,12 +97,8 @@
                 </v-stepper-step>
                 <v-stepper-content step="4">
 
-                        <v-flex sm12>
-                            <label>Ile książek branżowych czytałeś w tym roku?</label>
-                            <v-slider v-model="selected.books" :min="0"
-                                      :max="25" :label="selected.books" ticks></v-slider>
-                        </v-flex>
-                        <v-flex sm12>
+
+                        <v-flex>
                             <v-select v-model="selected.articles" :items="data.articles" label="Czytasz artykuły branżowe?"></v-select>
                         </v-flex>
                     <v-flex sm12>
@@ -174,8 +162,7 @@
     }
 </style>
 <script>
-    import * as data from "../data";
-
+    import apimap from '../api'
     var ages = (function () {
         var output = [];
         for (var i = 20; i < 60; i += 5) {
@@ -188,24 +175,20 @@
         props: {
             msg: String
         },
+        http:{
+          root:apimap.root
+        },
         data: () => ({
             step: 1,
             intro:true,
-            sliders:{
-                age:1,
-                level:1,
-                sallary:1,
-                spentTime:1,
-                books:0
-            },
             selected: {
                 country: "Polska",
                 district: "",
                 age: ages[1],
-                level: data.levels[1],
+                level: '',
                 position: "",
                 otherPosition: "",
-                sallary: data.sallaries[1],
+                sallary: '',
                 spentTime:"",
                 github:"",
                 freeTimeHabits:[],
@@ -223,9 +206,15 @@
                 itech:[],
                 email:""
             },
-            data: data,
+            data: {},
             ages: ages
-        })
+        }),
+        created:function(){
+            var that = this;
+            this.$http.get(apimap.form_data).then(response=>{
+                that.data = response.body;
+            });
+        }
 
     }
 </script>
