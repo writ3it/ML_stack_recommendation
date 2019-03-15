@@ -4,5 +4,5 @@ namespace ITR\Base;
 
 
 interface IResource{
-    public function Serve(array $data):array;
+    public function Serve(IResourceRequest $data): array;
 }

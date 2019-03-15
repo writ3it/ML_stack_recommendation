@@ -1,4 +1,5 @@
 <?php
+define('APPDIR', realpath(dirname(__FILE__) . '/../'));
 // DIC configuration
 
 $container = $app->getContainer();

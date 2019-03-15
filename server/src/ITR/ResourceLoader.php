@@ -14,6 +14,7 @@ define('NDS', '\\');
 define('EXT', '.php');
 
 use ITR\Base\IResource;
+use ITR\Base\IResourceRequest;
 
 
 class ResourceLoader
@@ -59,6 +60,23 @@ class ResourceLoader
         return new $className();
     }
 
+    const DEFAULT_REQUEST_PATH = 'ResourceRequest.php';
+    const DEFAULT_REQUEST_CLASSNAME = 'ResourceRequest';
+
+    public function GetInstanceOfRequest(): IResourceRequest
+    {
+        $path = $this->getRequestPath();
+        $className = $this->getClassname('Request');
+        if (!file_exists($path)) {
+            $path = BASE_PATH . DS . self::DEFAULT_REQUEST_PATH;
+            $className = NDS . __NAMESPACE__ . NDS . self::DEFAULT_REQUEST_CLASSNAME;
+        }
+        require_once $path;
+        return new $className();
+    }
+
+
+
     public function Exists(): bool
     {
         if (!$this->_validation) {
@@ -76,15 +94,25 @@ class ResourceLoader
         return BASE_PATH . DS . $this->GetRelativePath();
     }
 
-    public function GetRelativePath(): string
+    private function getRequestPath()
     {
-        return 'API' . DS . $this->getName($this->_version) . DS . $this->getName($this->_module) . DS . $this->getName($this->_resource) . EXT;
+        return BASE_PATH . DS . $this->GetRelativePath('Request');
     }
 
-    protected function getClassname(): string
+    const API_PREFIX = 'API';
+
+    public function GetRelativePath($type = self::API_PREFIX): string
     {
-        return NDS . __NAMESPACE__ . NDS . 'API' . NDS . $this->getName($this->_version) . NDS . $this->getName($this->_module) . NDS . $this->getName($this->_resource);
+        $postfix = $type !== self::API_PREFIX ? $type : '';
+        return $type . DS . $this->getName($this->_version) . DS . $this->getName($this->_module) . DS . $this->getName($this->_resource) . $postfix . EXT;
     }
+
+    protected function getClassname($type = self::API_PREFIX): string
+    {
+        $postfix = $type !== self::API_PREFIX ? $type : '';
+        return NDS . __NAMESPACE__ . NDS . $type . NDS . $this->getName($this->_version) . NDS . $this->getName($this->_module) . NDS . $this->getName($this->_resource) . $postfix;
+    }
+
 
     protected function getName(string $_name): string
     {
@@ -92,4 +120,6 @@ class ResourceLoader
         $names = array_map('ucfirst', $parts);
         return implode('', $names);
     }
+
+
 }

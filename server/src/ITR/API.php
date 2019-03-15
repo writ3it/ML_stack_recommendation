@@ -50,9 +50,17 @@ class API
      */
     public function Serve(array $data): array
     {
+        /** @var ResourceLoader $loader */
+        $loader = new ResourceLoader($this->_version, $this->_module, $this->_resource);
+        if (!$loader->Exists()) {
+            throw new NotFoundException($version, $module, $resource, $loader->GetRelativePath());
+        }
         /** @var IResource $obj */
-        $obj = $this->loadClassName($this->_version, $this->_module, $this->_resource);
-        return $obj->Serve($data);
+        $obj = $loader->GetInstance();
+        /** @var ResourceRequest $request */
+        $request = $loader->GetInstanceOfRequest();
+        $request->AppendInputData($data);
+        return $obj->Serve($request);
     }
 
     /**
@@ -63,11 +71,8 @@ class API
      */
     protected function loadClassName(string $version, string $module, string $resource)
     {
-        $loader = new ResourceLoader($version, $module, $resource);
-        if (!$loader->Exists()) {
-            throw new NotFoundException($version, $module, $resource, $loader->GetRelativePath());
-        }
-        return $loader->GetInstance();
+
+
     }
 
     /**
