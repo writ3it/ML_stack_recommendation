@@ -13,9 +13,6 @@ use ITR\Base\IResourceRequest;
 
 class ResourceRequest implements IResourceRequest
 {
-
-    protected $data = [];
-
     public function __construct()
     {
 
@@ -23,6 +20,11 @@ class ResourceRequest implements IResourceRequest
 
     public function AppendInputData(array $data)
     {
-        $this->data = $data;
+        $defaults = get_object_vars($this);
+        $properties = array_keys($defaults);
+        $partData = array_intersect_key($data, array_flip($properties));
+        foreach ($partData as $name => $value) {
+            $this->{$name} = $value;
+        }
     }
 }

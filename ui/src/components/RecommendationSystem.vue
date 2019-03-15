@@ -64,7 +64,7 @@
                                 ></v-radio>
                             </v-radio-group>
                         </v-flex>
-                        <v-flex v-if="selected.position=='Inne'">
+                        <v-flex v-if="selected.position=='Inne'" sm12>
                             <v-text-field label="Inne stanowisko - jakie?" v-model="selected.otherPosition"></v-text-field>
                         </v-flex>
                         <v-flex>
@@ -140,7 +140,9 @@
                 </v-stepper-step>
                 <v-stepper-content step="6">
                     <v-flex sm12>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque libero augue, rhoncus id aliquet vel, efficitur a nisi. Mauris at eros non erat pulvinar mattis. In consequat velit augue, ac cursus felis ullamcorper at. Ut nulla mi, elementum ac ex et, vehicula consectetur tortor. Nulla vel dolor facilisis, dapibus magna a, accumsan massa. Vivamus eget fermentum neque. Integer vitae leo sit amet leo pretium cursus. Donec et turpis et purus euismod egestas. Nulla commodo turpis vel egestas elementum. Ut gravida, massa et sodales dapibus, metus diam fermentum diam, eu faucibus erat mi eu tortor. Vivamus porta tellus eget bibendum dapibus. Quisque vitae purus in dui aliquet malesuada. Curabitur dapibus, nibh et lacinia suscipit, lectus diam ultricies sapien, non luctus nisi libero in sem. Fusce tempus purus eros, at ultrices ipsum sodales sed. Donec et suscipit massa. Curabitur at dui lacus. </p>
+                        <p>
+                            <v-btn color="success" @click="send">Zamów</v-btn>
+                        </p>
                     </v-flex>
                 </v-stepper-content>
 
@@ -214,6 +216,13 @@
             this.$http.get(apimap.form_data).then(response=>{
                 that.data = response.body;
             });
+        },
+        methods:{
+            send:function(){
+                this.$http.post(apimap.create_request,this.selected).then(response=>{
+                    console.log(response);
+                })
+            }
         }
 
     }

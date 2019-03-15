@@ -8,16 +8,18 @@
 
 namespace ITR\API\V1\Recommendation;
 
+use ITR\Base\IResourceRequest;
+use ITR\Resource;
 
-use ITR\Base\IResource;
-
-class CreateRequest implements IResource
+class CreateRequest extends Resource
 {
 
-    public function Serve(array $data): array
+    public function Process(IResourceRequest $data): array
     {
+        // TODO: Create request in filesystem
         return [
             'test'=>"it's working!"
         ];
     }
+
 }

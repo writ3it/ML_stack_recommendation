@@ -4,6 +4,7 @@ namespace ITR;
 
 use ITR\Base\IResource;
 use ITR\Exception\NotFoundException;
+use ITR\HTTP\HTTPMethod;
 
 class API
 {
@@ -11,6 +12,7 @@ class API
     private $_version = false;
     private $_module = false;
     private $_resource = false;
+    private $http_status_code = 200;
 
     /**
      * With API versioning, server could be deal with clients with old interface
@@ -48,7 +50,7 @@ class API
     /**
      * Generate response data
      */
-    public function Serve(array $data): array
+    public function Serve(array $data, $method): array
     {
         /** @var ResourceLoader $loader */
         $loader = new ResourceLoader($this->_version, $this->_module, $this->_resource);
@@ -60,7 +62,15 @@ class API
         /** @var ResourceRequest $request */
         $request = $loader->GetInstanceOfRequest();
         $request->AppendInputData($data);
-        return $obj->Serve($request);
+        switch ($method) {
+            case HTTPMethod::GET:
+                return $obj->Serve($request);
+            case HTTPMethod::POST:
+                return $obj->Process($request);
+            default:
+                $this->http_status_code = 404;
+                return ['error' => 'Resource not found'];
+        }
     }
 
     /**
@@ -81,7 +91,7 @@ class API
      */
     public function GetStatusCode()
     {
-        return 200;
+        return $this->http_status_code;
     }
 
 

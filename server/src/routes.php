@@ -2,7 +2,7 @@
 
 use Slim\Http\Request;
 use Slim\Http\Response;
-
+use ITR\HTTP\HTTPMethod;
 use ITR\API;
 
 $app->get('/', function (Request $request, Response $response, array $args) {
@@ -14,7 +14,8 @@ $app->get('/', function (Request $request, Response $response, array $args) {
 });
 
 
-$app->get('/api/{version}/{module}/{resource}', function (Request $request, Response $response, array $args) {
+function apiController(Request $request, Response $response, array $args)
+{
     extract($args);
     /** @var string $version */
     /** @var string $module */
@@ -22,9 +23,17 @@ $app->get('/api/{version}/{module}/{resource}', function (Request $request, Resp
     /** @var ITR\API $api */
     $api = new API();
     $requestData = $request->getParsedBody() ?? [];
-    $data = $api->UseVersion($version)->UseModule($module)->UseResource($resource)->Serve($requestData);
+    $api = $api->UseVersion($version)->UseModule($module)->UseResource($resource);
+    $method = HTTPMethod::GET;
+    if ($request->isPost()) {
+        $method = HTTPMethod::POST;
+    }
+    $data = $api->Serve($requestData, $method);
     return $response->withJson($data, $api->GetStatusCode());
-});
+}
+
+$app->get('/api/{version}/{module}/{resource}', 'apiController');
+$app->post('/api/{version}/{module}/{resource}', 'apiController');
 
 
 $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($req, $res) {

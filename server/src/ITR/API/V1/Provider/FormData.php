@@ -8,11 +8,10 @@
 
 namespace ITR\API\V1\Provider;
 
-use ITR\Base\IResource;
 use ITR\Base\IResourceRequest;
+use ITR\Resource;
 
-
-class FormData implements IResource
+class FormData extends Resource
 {
 
     public function Serve(IResourceRequest $data): array

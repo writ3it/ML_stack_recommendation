@@ -7,13 +7,9 @@ function url(module, resource){
 
 let urlMap = {
     'host':domains,
-    'headers':{
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-    },
     'root':domains+'api/'+version,
-    'form_data':url('provider','form-data')
+    'form_data':url('provider','form-data'),
+    'create_request':url('recommendation','create-request')
 };
 
 export default urlMap;
