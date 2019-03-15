@@ -18,3 +18,9 @@ $container['logger'] = function ($c) {
     $logger->pushHandler(new Monolog\Handler\StreamHandler($settings['path'], $settings['level']));
     return $logger;
 };
+
+$container['environment'] = function () {
+    $scriptName = $_SERVER['SCRIPT_NAME'];
+    $_SERVER['SCRIPT_NAME'] = dirname(dirname($scriptName)) . '/' . basename($scriptName);
+    return new Slim\Http\Environment($_SERVER);
+};
