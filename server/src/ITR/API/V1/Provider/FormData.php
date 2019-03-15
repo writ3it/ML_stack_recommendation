@@ -33,7 +33,9 @@ class FormData implements IResource
             'studies' => $this->load_data('studies'),
             'tdd' => $this->load_data('tdd'),
             'tech' => $this->load_data('tech_and_schools'),
-
+            'timesWithComputer' => $this->makeData('timesWithComputer'),
+            'jobExperience' => $this->makeData('jobExperience'),
+            'sallaries' => $this->makeData('sallaries')
         ];
     }
 
@@ -44,5 +46,43 @@ class FormData implements IResource
             return [];
         }
         return \json_decode(\file_get_contents($path));
+    }
+
+    private function makeData(string $funname)
+    {
+        if (!is_callable(array($this, $funname))) {
+            return [];
+        }
+        return $this->{$funname}();
+    }
+
+    private function timesWithComputer()
+    {
+        $times = [];
+        for ($i = 0; $i <= 20; $i += 3) {
+            $times[] = $i . ' - ' . ($i + 2) . ' h';
+        }
+        return $times;
+    }
+
+    private function jobExperience()
+    {
+        $times = [];
+        for ($i = 0; $i <= 27; $i += 3) {
+            $times[] = $i . ' - ' . ($i + 2) . ' lat';
+        }
+        $times[] = '30+';
+        return $times;
+    }
+
+    private function sallaries()
+    {
+        $times = [];
+        $dt = 1000;
+        for ($i = 500; $i <= 60000; $i += $dt) {
+            $times[] = $i . ' - ' . ($i + $dt - 1) . ' zł';
+        }
+        $times[] = 'Ponad 60k zł';
+        return $times;
     }
 }
