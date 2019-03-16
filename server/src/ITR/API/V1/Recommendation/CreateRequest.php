@@ -17,9 +17,11 @@ class CreateRequest extends Resource
     public function Process(IResourceRequest $data): array
     {
         // TODO: Create request in filesystem
-        return [
-            'test'=>"it's working!"
-        ];
+        $errors = $data->GetErrors();
+        $errors = array_map(function ($messages) {
+            return implode("\n", $messages);
+        }, $errors);
+        return ['has_errors' => $data->HasErrors(), 'errors' => $errors];
     }
 
 }

@@ -6,10 +6,11 @@
  * Time: 10:41
  */
 
-namespace ITR\Validation;
+namespace ITR\Validation\Custom;
 
-use Respect\Validation\Rules\ArrayVal;
+use ITR\Base\IResourceRequest;
 use Respect\Validation\Validator as v;
+use ITR\Validation\IValidator;
 
 
 class ArrayValidator implements IValidator
@@ -31,7 +32,7 @@ class ArrayValidator implements IValidator
         return $this;
     }
 
-    public function validate($val): bool
+    public function validate($val, IResourceRequest $request): bool
     {
         if (!v::arrayVal()->each(v::stringType())) {
             return false;

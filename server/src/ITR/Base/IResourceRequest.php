@@ -14,4 +14,8 @@ interface IResourceRequest
     public function __construct();
 
     public function AppendInputData(array $data);
+
+    public function GetErrors(): array;
+
+    public function HasErrors(): bool;
 }

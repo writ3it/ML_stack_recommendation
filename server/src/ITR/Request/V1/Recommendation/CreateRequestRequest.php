@@ -11,7 +11,7 @@ namespace ITR\Request\V1\Recommendation;
 
 use ITR\Data\FormDataGenerator;
 use ITR\ResourceRequest;
-use ITR\Validation\ArrayValidator;
+use ITR\Validation\Custom\ArrayValidator;
 use ITR\Validation\Custom\DistrictValidator;
 use ITR\Validation\Custom\OverflowValidator;
 use ITR\Validation\IInlineValidator;
@@ -56,13 +56,13 @@ class CreateRequestRequest extends ResourceRequest
 
     public function __construct()
     {
-        parent::validate();
         $this->data = new FormDataGenerator();
+        parent::__construct();
     }
 
     public function InitValidation()
     {
-        $this->validate('*', OverflowValidator::x());
+        $this->validate(self::ALL_RULES, OverflowValidator::x());
         $this->validate('activities',
             ArrayValidator::x()->SetMinCount(3)->SetMaxCount(10),
             "Proszę wybrać od 3 do 10 aktywności");
@@ -77,10 +77,10 @@ class CreateRequestRequest extends ResourceRequest
         $this->validate('country',
             new Validator(v::in($this->getFormData('countries'))));
 
-        $districts = v::in($this->getFormData('polish_districts');
+        $districts = $this->getFormData('polish_districts');
         $districts[] = '';
         $this->validate('district',
-            new Validator($districts))
+            new Validator(v::in($districts))
         );
 
         $this->validate('email', new Validator(v::email()), $msg = "To nie jest prawidłowy adres e-mail");
@@ -98,7 +98,6 @@ class CreateRequestRequest extends ResourceRequest
         $this->validate('spentTime', new Validator(v::in($this->getFormData('timesWithComputer'))));
         $this->validate('studies', new Validator(v::in($this->getFormData('studies'))));
         $this->validate('tdd', new Validator(v::in($this->getFormData('tdd'))));
-
     }
 
     private function getFormData(string $string)

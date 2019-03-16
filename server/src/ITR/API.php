@@ -52,6 +52,9 @@ class API
      */
     public function Serve(array $data, $method): array
     {
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);
         /** @var ResourceLoader $loader */
         $loader = new ResourceLoader($this->_version, $this->_module, $this->_resource);
         if (!$loader->Exists()) {
