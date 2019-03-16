@@ -15,6 +15,7 @@ App that generates reports which contains personal recommendations of technology
 - [Vue.js](https://vuejs.org/)
 - [Vuetify](https://vuetifyjs.com/en/)
 - [Slim, a micro framework for PHP](http://www.slimframework.com/)
+- [Recaptcha v3](https://developers.google.com/recaptcha/docs/v3)
 - [Respect\Validation](https://respect-validation.readthedocs.io/en/1.1/)
 - [hassankhan/config](https://github.com/hassankhan/config)
 - [PHPUnit](https://phpunit.de/)
