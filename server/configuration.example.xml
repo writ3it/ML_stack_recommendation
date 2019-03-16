@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+    <need-requests>300</need-requests>
     <form>
         <static-data>
             <path>/form_data/</path>
@@ -7,7 +8,12 @@
     </form>
     <requests>
         <destination>
-            <path>/../requests/</path>
+            <path>/../../requests/</path>
+            <types>
+                <request>timestamp</request>
+                <batch>timestamp</batch>
+                <svd>email</svd>
+            </types>
         </destination>
     </requests>
 </config>

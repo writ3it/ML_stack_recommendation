@@ -9,6 +9,7 @@
 namespace ITR\Storage;
 
 
+use FilesystemIterator;
 use ITR\Base\IResourceRequest;
 
 class Storage
@@ -33,7 +34,7 @@ class Storage
         $this->_persisted = count($this->_types) > 0;
         foreach ($this->_types as $name => $key) {
             $filename = $data[$key];
-            $dir = $this->_path . $name . '/';
+            $dir = $this->getTypePath($name);
             $path = $dir . $filename . '.json';
             if (!file_exists($dir)) {
                 mkdir($dir, $mode = 0755, $recursive = true);
@@ -43,8 +44,23 @@ class Storage
         }
     }
 
+    protected function getTypePath($type)
+    {
+        return $this->_path . $type . '/';
+    }
+
     public function IsPersisted(): bool
     {
         return $this->_persisted;
+    }
+
+    public function Count(string $string): int
+    {
+        $path = $this->getTypePath($string);
+        if (!file_exists($path)) {
+            return 0;
+        }
+        $fi = new FilesystemIterator($path, FilesystemIterator::SKIP_DOTS);
+        return iterator_count($fi);
     }
 }
