@@ -33,7 +33,7 @@
                                       label="Jak często bywasz na rozmowie rekrutacyjnej?"></v-select>
                         </v-flex>
                         <v-flex sm12>
-                            <v-select v-model="selected.age" :items="ages" label="Ile masz lat?"></v-select>
+                            <v-select v-model="selected.age" :items="data.ages" label="Ile masz lat?"></v-select>
                         </v-flex>
                     </v-layout>
                 </v-stepper-content>
@@ -68,7 +68,7 @@
                             <v-text-field label="Inne stanowisko - jakie?" v-model="selected.otherPosition"></v-text-field>
                         </v-flex>
                         <v-flex>
-                            <v-select v-model="selected.sallary" :items="data.sallaries" label="Zarobki (za etat, netto) / msc"></v-select>
+                            <v-select v-model="selected.salary" :items="data.salaries" label="Zarobki (za etat, netto) / msc"></v-select>
                         </v-flex>
                     </v-layout>
                 </v-stepper-content>
@@ -132,7 +132,7 @@
                         <v-combobox v-model="selected.tech" :items="data.tech" label="Które narzędzia/technologie dają Ci chleb?" chips multiple deletable-chips></v-combobox>
                     </v-flex>
                     <v-flex sm12>
-                        <v-combobox v-model="selected.itech" :items="data.tech" label="Które narzędzia/technologie dają Cię interesują?" chips multiple deletable-chips></v-combobox>
+                        <v-combobox v-model="selected.itech" :items="data.tech" label="Które narzędzia/technologie Ciebie interesują?" chips multiple deletable-chips></v-combobox>
                     </v-flex>
                 </v-stepper-content>
                 <v-stepper-step step="6" :complete="step>6">
@@ -164,14 +164,7 @@
     }
 </style>
 <script>
-    import apimap from '../api'
-    var ages = (function () {
-        var output = [];
-        for (var i = 20; i < 60; i += 5) {
-            output.push(i + " - " + (i + 4) + " lat");
-        }
-        return output;
-    })()
+    import apimap from '../api';
     export default {
         name: 'RecommendationForm',
         props: {
@@ -186,11 +179,11 @@
             selected: {
                 country: "Polska",
                 district: "",
-                age: ages[1],
+                age: '',
                 level: '',
                 position: "",
                 otherPosition: "",
-                sallary: '',
+                salary: '',
                 spentTime:"",
                 github:"",
                 freeTimeHabits:[],
@@ -208,8 +201,7 @@
                 itech:[],
                 email:""
             },
-            data: {},
-            ages: ages
+            data: {}
         }),
         created:function(){
             var that = this;
@@ -220,7 +212,7 @@
         methods:{
             send:function(){
                 this.$http.post(apimap.create_request,this.selected).then(response=>{
-                    console.log(response);
+                    alert(response)
                 })
             }
         }

@@ -10,12 +10,13 @@ namespace ITR;
 
 
 use ITR\Base\IResourceRequest;
+use ITR\Validation\IValidator;
 
 class ResourceRequest implements IResourceRequest
 {
     public function __construct()
     {
-
+        $this->InitValidation();
     }
 
     public function AppendInputData(array $data)
@@ -26,5 +27,17 @@ class ResourceRequest implements IResourceRequest
         foreach ($partData as $name => $value) {
             $this->{$name} = $value;
         }
+    }
+
+    protected function InitValidation()
+    {
+
+    }
+
+    protected $validators = [];
+
+    protected function validate(string $name, IValidator $fieldValidator, $message = "Podana wartość jest niepoprawna")
+    {
+        $this->validators[$name][] = ['validator' => $fieldValidator, 'message' => $message];
     }
 }
