@@ -4,7 +4,7 @@
     <v-content>
       <v-container fluid>
         <v-flex xs12 sm8 offset-sm2 md6 offset-md3 lg4 offset-lg4>
-          <RecommendationForm msg="Rekomendacje IT"/>
+          <RecommendationForm msg="Rekomendacje IT" @recaptcha-auth="recaptchaAuth" :token="recaptcha"/>
         </v-flex>
       </v-container>
     </v-content>
@@ -21,6 +21,17 @@ export default {
   },
   created(){
     document.title='Rekomendacje IT | writ3it'
+  },
+  data:()=>({
+    recaptcha:''
+  }),
+  methods:{
+    recaptchaAuth:function(){
+      let that = this;
+      this.$recaptcha('login').then((token) => {
+        that.recaptcha = token;
+      })
+    }
   }
 }
 </script>

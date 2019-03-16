@@ -20,5 +20,7 @@ yarn-error.log*
 *.sln
 *.sw*
 
+
+!/src/analytic.js
 #ignore
-/src/analytic.js
+/src/configuration.js
