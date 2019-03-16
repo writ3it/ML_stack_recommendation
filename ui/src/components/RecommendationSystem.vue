@@ -10,10 +10,24 @@
                         Aby dać Tobie spojrzenie z lotu ptaka na nasze "ZOO" przygotowałem aplikację wykorzystującą Machine Learning do wytyczania propozycji rozwoju dla Ciebie.
                         Interesują Ciebie lepsze zarobki? Relokacja? Być może planujesz przebudować swój stack. Wypełnij formularz i&nbsp;nzamów darmowy raport!
                     </p>
-                    <v-btn color="success" @click="intro=false">Wypełnij formularz</v-btn>
+                    <v-btn color="success" @click="intro=false" v-if="!filled">Wypełnij formularz</v-btn>
+                    <div v-if="filled">
+                        <v-alert
+                                :value="true"
+                                type="success"
+                        ><h4>Wypełniłeś już formularz!</h4></v-alert>
+                    </div>
+
+
                     <p style="text-align:justify">
                         Celem projektu jest prezentacja oraz zastosowanie możliwości SVD. Więcej informacji o&nbsp;aplikacji znajdziesz  <a href="https://github.com/writ3it/ML_stack_recommendation" rel="nofollow" target="_blank">github</a>. O skuteczności raportu decyduje ilość zebranych danych oraz ich różnorodność.
                     </p>
+                    <v-alert
+                            :value="true"
+                            type="warning"
+                    >
+                        Aby dostarczyć raport potrzebujemy wiedzy, którą możemy przeanalizować. Obecnie serwery są wypełnione tylko w <strong>{{currentState}}</strong>. Dopiero po ich zapełnieniu mogą wziąć się do pracy! Jeżeli chcesz przyspieszyć proces, rozpowszechnij ten formularz.
+                    </v-alert>
 
                 </div>
 
@@ -153,6 +167,9 @@
                         <v-flex sm12>
                             <v-combobox v-model="selected.itech" :items="data.tech" label="Które narzędzia/technologie Ciebie interesują?" chips multiple deletable-chips :error-messages="errors.itech" required :rules="rules.select"></v-combobox>
                         </v-flex>
+                        <v-flex sm12>
+                            <v-btn color="success" @click="changeStep(6)">Przejdź dalej</v-btn>
+                        </v-flex>
                     </v-form>
                 </v-stepper-content>
                 <v-stepper-step step="6" :complete="step>6">
@@ -160,8 +177,11 @@
                 </v-stepper-step>
                 <v-stepper-content step="6">
                     <v-flex sm12>
+                        {{ message }}
+                    </v-flex>
+                    <v-flex sm12>
                         <p>
-                            <v-btn color="success" @click="send">Zamów</v-btn>
+                            <v-btn color="success" @click="send" large class="fullwidth">Zamów</v-btn>
                         </p>
                     </v-flex>
                 </v-stepper-content>
@@ -182,9 +202,14 @@
         text-align:center;
         margin-top:50%;
     }
+    .fullwidth{
+        width:100%;
+    }
 </style>
 <script>
     import apimap from '../api';
+    import Vue from 'vue'
+    import VueCookies from 'vue-cookies'
     export default {
         name: 'RecommendationForm',
         props: {
@@ -231,14 +256,20 @@
                     v => !!v || 'To pole jest wymagane.'
                 ]
             },
+            filled: VueCookies.get('form-filled'),
             data: {},
             errors:{},
-            message:''
+            message:'',
+            currentState:''
         }),
         created:function(){
             const that = this;
             this.$http.get(apimap.form_data).then(response=>{
                 that.data = response.body;
+            });
+            this.$http.get(apimap.counter).then(response=>{
+                const y = (response.body.count / response.body.limit).toFixed(2).toString()+'%';
+                that.currentState= y;
             });
         },
         methods:{
@@ -253,6 +284,15 @@
                 }
                 this.$http.post(apimap.create_request,this.selected).then(response=>{
                     that.errors = response.body.errors;
+                    if (response.body.has_errors){
+                        that.message = 'W formularzu są błędy. Popraw je proszę!';
+                    }
+                    if (response.body.success){
+                        that.message = 'Twój formularz został zamówiony!'
+                        VueCookies.set('form-filled',true);
+                        that.intro = true;
+                        that.filled = true;
+                    }
                 })
             },
             changeStep:function(step){

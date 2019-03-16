@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+    <need-requests>300</need-requests>
     <form>
         <static-data>
             <path>/form_data/</path>
