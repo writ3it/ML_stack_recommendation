@@ -32,6 +32,7 @@ class CreateRequestRequest extends ResourceRequest
     public $age;
     public $articles;
     public $country;
+    public $reviews;
     public $district;
     public $email;
     public $exp;
@@ -98,6 +99,7 @@ class CreateRequestRequest extends ResourceRequest
         $this->validate('spentTime', new Validator(v::in($this->getFormData('timesWithComputer'))));
         $this->validate('studies', new Validator(v::in($this->getFormData('studies'))));
         $this->validate('tdd', new Validator(v::in($this->getFormData('tdd'))));
+        $this->validate('reviews', new Validator(v::in($this->getFormData('employee_reviews'))));
     }
 
     private function getFormData(string $string)
