@@ -5,14 +5,25 @@ namespace ITR;
 use ITR\Base\IResource;
 use ITR\Exception\NotFoundException;
 use ITR\HTTP\HTTPMethod;
+use Noodlehaus\ConfigInterface;
 
 class API
 {
-
+    /** @var string */
     private $_version = false;
+    /** @var string */
     private $_module = false;
+    /** @var string */
     private $_resource = false;
+    /** @var int */
     private $http_status_code = 200;
+    /** @var ConfigInterface */
+    private $config;
+
+    public function __construct(ConfigInterface $config)
+    {
+        $this->config = $config;
+    }
 
     /**
      * With API versioning, server could be deal with clients with old interface
@@ -62,8 +73,10 @@ class API
         }
         /** @var IResource $obj */
         $obj = $loader->GetInstance();
+        $obj->SetConfiguration($this->config);
         /** @var ResourceRequest $request */
         $request = $loader->GetInstanceOfRequest();
+        $request->Configure($this->config);
         $request->AppendInputData($data);
         switch ($method) {
             case HTTPMethod::GET:
@@ -74,18 +87,6 @@ class API
                 $this->http_status_code = 404;
                 return ['error' => 'Resource not found'];
         }
-    }
-
-    /**
-     * Create instance of resource
-     * @param string $version
-     * @param string $module
-     * @param string $resource
-     */
-    protected function loadClassName(string $version, string $module, string $resource)
-    {
-
-
     }
 
     /**

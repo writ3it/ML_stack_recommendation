@@ -9,6 +9,8 @@
 namespace ITR\Base;
 
 
+use Noodlehaus\ConfigInterface;
+
 interface IResourceRequest
 {
     public function __construct();
@@ -18,4 +20,6 @@ interface IResourceRequest
     public function GetErrors(): array;
 
     public function HasErrors(): bool;
+
+    public function Configure(ConfigInterface $config);
 }

@@ -38,6 +38,10 @@ class ResourceRequest implements IResourceRequest
 
     protected $validators = [];
 
+    public function Configure(\Noodlehaus\ConfigInterface $config)
+    {
+    }
+
     protected function validate(string $name, IValidator $fieldValidator, $message = "Podana wartość jest niepoprawna")
     {
         $this->validators[$name][] = ['validator' => $fieldValidator, 'message' => $message];

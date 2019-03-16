@@ -11,9 +11,12 @@ namespace ITR;
 
 use ITR\Base\IResource;
 use ITR\Base\IResourceRequest;
+use Noodlehaus\ConfigInterface;
 
 class Resource implements IResource
 {
+    /** @var ConfigInterface */
+    protected $config = false;
 
     public function Serve(IResourceRequest $data): array
     {
@@ -23,5 +26,10 @@ class Resource implements IResource
     public function Process(IResourceRequest $data): array
     {
         return ['error' => 'Not found'];
+    }
+
+    public function SetConfiguration(ConfigInterface $config)
+    {
+        $this->config = $config;
     }
 }

@@ -11,6 +11,15 @@ namespace ITR\Data;
 
 class FormDataGenerator
 {
+    /**
+     * @var string
+     */
+    private $_path = '';
+
+    public function __construct(string $path)
+    {
+        $this->_path = APPDIR . $path;
+    }
 
     public function GetData(string $name)
     {
@@ -22,7 +31,7 @@ class FormDataGenerator
 
     protected function loadData(string $string)
     {
-        $path = APPDIR . '/form_data/' . $string . '.json';
+        $path = $this->_path . $string . '.json';
         if (!file_exists($path)) {
             return [];
         }

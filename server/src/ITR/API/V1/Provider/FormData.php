@@ -17,7 +17,7 @@ class FormData extends Resource
 
     public function Serve(IResourceRequest $data): array
     {
-        $generator = new FormDataGenerator();
+        $generator = new FormDataGenerator($this->config->get('form.static-data.path'));
         return [
             'countries' => $generator->GetData('countries'),
             'activities' => $generator->GetData('activities'),

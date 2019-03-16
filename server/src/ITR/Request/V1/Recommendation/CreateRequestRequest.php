@@ -16,6 +16,8 @@ use ITR\Validation\Custom\DistrictValidator;
 use ITR\Validation\Custom\OverflowValidator;
 use ITR\Validation\IInlineValidator;
 use ITR\Validation\Validator;
+use Noodlehaus\Config;
+use Noodlehaus\ConfigInterface;
 use Respect\Validation\Rules\Age;
 use Respect\Validation\Rules\AllOf;
 use Respect\Validation\Rules\ArrayVal;
@@ -51,14 +53,20 @@ class CreateRequestRequest extends ResourceRequest
     public $spentTime;
     public $studies;
     public $tdd;
+    public $timestamp;
 
 
     private $data;
 
     public function __construct()
     {
-        $this->data = new FormDataGenerator();
-        parent::__construct();
+        $this->timestamp = time();
+    }
+
+    public function Configure(ConfigInterface $config)
+    {
+        $this->data = new FormDataGenerator($config->get('form.static-data.path'));
+        $this->InitValidation();
     }
 
     public function InitValidation()
@@ -87,7 +95,7 @@ class CreateRequestRequest extends ResourceRequest
         $this->validate('email', new Validator(v::email()), $msg = "To nie jest prawidłowy adres e-mail");
         $this->validate('exp', new Validator(v::in($this->getFormData('jobExperience'))));
         $this->validate('jobExp', new Validator(v::in($this->getFormData('jobExperience'))));
-        $this->validate('freeTimeHabits', new Validator(v::in($this->getFormData('free_time_habits'))));
+        $this->validate('freeTimeHabits', ArrayValidator::x()->SetMaxCount(100)->SetMinCount(2), "Wybierz przynajmniej 2 rzeczy");
         $this->validate('itech', ArrayValidator::x()->SetMaxCount(100)->SetMinCount(3), "Wybierz przynajmniej 3 technologie");
         $this->validate('tech', ArrayValidator::x()->SetMaxCount(100)->SetMinCount(3), "Wybierz przynajmniej 3 technologie");
         $this->validate('level', new Validator(v::in($this->getFormData('job_levels'))));
