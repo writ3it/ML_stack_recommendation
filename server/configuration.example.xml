@@ -6,6 +6,9 @@
             <path>/form_data/</path>
         </static-data>
     </form>
+    <recaptcha>
+        <secret>secret key recaptcha3</secret>
+    </recaptcha>
     <requests>
         <destination>
             <path>/../../requests/</path>

@@ -177,7 +177,7 @@
                 </v-stepper-step>
                 <v-stepper-content step="6">
                     <v-flex sm12>
-                        {{ message }}
+                        {{ message }} {{errors.token}}
                     </v-flex>
                     <v-flex sm12>
                         <p>

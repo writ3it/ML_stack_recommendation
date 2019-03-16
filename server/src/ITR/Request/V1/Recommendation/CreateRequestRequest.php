@@ -14,6 +14,7 @@ use ITR\ResourceRequest;
 use ITR\Validation\Custom\ArrayValidator;
 use ITR\Validation\Custom\DistrictValidator;
 use ITR\Validation\Custom\OverflowValidator;
+use ITR\Validation\Custom\RecaptchaValidator;
 use ITR\Validation\IInlineValidator;
 use ITR\Validation\Validator;
 use Noodlehaus\Config;
@@ -54,6 +55,7 @@ class CreateRequestRequest extends ResourceRequest
     public $studies;
     public $tdd;
     public $timestamp;
+    public $token;
 
 
     private $data;
@@ -65,6 +67,7 @@ class CreateRequestRequest extends ResourceRequest
 
     public function Configure(ConfigInterface $config)
     {
+        parent::Configure($config);
         $this->data = new FormDataGenerator($config->get('form.static-data.path'));
         $this->InitValidation();
     }
@@ -72,6 +75,7 @@ class CreateRequestRequest extends ResourceRequest
     public function InitValidation()
     {
         $this->validate(self::ALL_RULES, OverflowValidator::x());
+        $this->validate('token', RecaptchaValidator::x(), "Jesteś robotem!");
         $this->validate('activities',
             ArrayValidator::x()->SetMinCount(3)->SetMaxCount(10),
             "Proszę wybrać od 3 do 10 aktywności");

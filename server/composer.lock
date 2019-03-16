@@ -4,9 +4,62 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-  "content-hash": "b1da781e85d6922cf9555ce00ea296df",
+  "content-hash": "3e2e6cc855b2566291377a071ddacded",
     "packages": [
         {
+          "name": "akrabat/ip-address-middleware",
+          "version": "1.0.1",
+          "source": {
+            "type": "git",
+            "url": "https://github.com/akrabat/ip-address-middleware.git",
+            "reference": "9b0bffcad90bd365c5bfbdb430563cd4e35a93ba"
+          },
+          "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/akrabat/ip-address-middleware/zipball/9b0bffcad90bd365c5bfbdb430563cd4e35a93ba",
+            "reference": "9b0bffcad90bd365c5bfbdb430563cd4e35a93ba",
+            "shasum": ""
+          },
+          "require": {
+            "php": "^7.0",
+            "psr/http-message": "^1.0",
+            "psr/http-server-middleware": "^1.0"
+          },
+          "replace": {
+            "akrabat/rka-ip-address-middleware": "*"
+          },
+          "require-dev": {
+            "phpunit/phpunit": "^6.5",
+            "squizlabs/php_codesniffer": "^3.2",
+            "zendframework/zend-diactoros": "^1.7"
+          },
+          "type": "library",
+          "autoload": {
+            "psr-4": {
+              "RKA\\Middleware\\": "src"
+            }
+          },
+          "notification-url": "https://packagist.org/downloads/",
+          "license": [
+            "BSD-3-Clause"
+          ],
+          "authors": [
+            {
+              "name": "Rob Allen",
+              "email": "rob@akrabat.com",
+              "homepage": "http://akrabat.com"
+            }
+          ],
+          "description": "PSR-15 middleware that determines the client IP address and stores it as a ServerRequest attribute",
+          "homepage": "http://github.com/akrabat/rka-ip-address-middleware",
+          "keywords": [
+            "IP",
+            "middleware",
+            "psr7"
+          ],
+          "time": "2018-07-03T06:53:57+00:00"
+        },
+      {
             "name": "container-interop/container-interop",
             "version": "1.2.0",
             "source": {
@@ -38,62 +91,109 @@
             "time": "2017-02-14T19:40:03+00:00"
         },
         {
-          "name": "hassankhan/config",
-          "version": "2.0.1",
+          "name": "google/recaptcha",
+          "version": "1.2.1",
           "source": {
             "type": "git",
-            "url": "https://github.com/hassankhan/config.git",
-            "reference": "5c0ad8e530013c559cfa1e7e77a586075e667f56"
+            "url": "https://github.com/google/recaptcha.git",
+            "reference": "e7add3be59211482ecdb942288f52da64a35f61a"
           },
           "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/hassankhan/config/zipball/5c0ad8e530013c559cfa1e7e77a586075e667f56",
-            "reference": "5c0ad8e530013c559cfa1e7e77a586075e667f56",
+            "url": "https://api.github.com/repos/google/recaptcha/zipball/e7add3be59211482ecdb942288f52da64a35f61a",
+            "reference": "e7add3be59211482ecdb942288f52da64a35f61a",
             "shasum": ""
           },
           "require": {
-            "php": ">=5.5.9"
+            "php": ">=5.5"
           },
           "require-dev": {
-            "phpunit/phpunit": ">= 4.8.36",
-            "scrutinizer/ocular": "~1.1",
-            "squizlabs/php_codesniffer": "~2.2",
-            "symfony/yaml": "~3.4"
-          },
-          "suggest": {
-            "symfony/yaml": "~3.4"
+            "friendsofphp/php-cs-fixer": "^2.2.20|^2.12",
+            "php-coveralls/php-coveralls": "^2.1",
+            "phpunit/phpunit": "^4.8.36|^5.7.27|^6.59|^7"
           },
           "type": "library",
+          "extra": {
+            "branch-alias": {
+              "dev-master": "1.2.x-dev"
+            }
+          },
           "autoload": {
             "psr-4": {
-              "Noodlehaus\\": "src"
+              "ReCaptcha\\": "src/ReCaptcha"
             }
           },
           "notification-url": "https://packagist.org/downloads/",
           "license": [
-            "MIT"
+            "BSD-3-Clause"
           ],
-          "authors": [
-            {
-              "name": "Hassan Khan",
-              "homepage": "http://hassankhan.me/",
-              "role": "Developer"
-            }
-          ],
-          "description": "Lightweight configuration file loader that supports PHP, INI, XML, JSON, and YAML files",
-          "homepage": "http://hassankhan.me/config/",
+          "description": "Client library for reCAPTCHA, a free service that protects websites from spam and abuse.",
+          "homepage": "https://www.google.com/recaptcha/",
           "keywords": [
-            "config",
-            "configuration",
-            "ini",
-            "json",
-            "microphp",
-            "unframework",
-            "xml",
-            "yaml",
-            "yml"
+            "Abuse",
+            "captcha",
+            "recaptcha",
+            "spam"
           ],
-          "time": "2019-02-01T13:58:25+00:00"
+          "time": "2018-08-05T09:31:53+00:00"
+        },
+      {
+        "name": "hassankhan/config",
+        "version": "2.0.1",
+        "source": {
+          "type": "git",
+          "url": "https://github.com/hassankhan/config.git",
+          "reference": "5c0ad8e530013c559cfa1e7e77a586075e667f56"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://api.github.com/repos/hassankhan/config/zipball/5c0ad8e530013c559cfa1e7e77a586075e667f56",
+          "reference": "5c0ad8e530013c559cfa1e7e77a586075e667f56",
+          "shasum": ""
+        },
+        "require": {
+          "php": ">=5.5.9"
+        },
+        "require-dev": {
+          "phpunit/phpunit": ">= 4.8.36",
+          "scrutinizer/ocular": "~1.1",
+          "squizlabs/php_codesniffer": "~2.2",
+          "symfony/yaml": "~3.4"
+        },
+        "suggest": {
+          "symfony/yaml": "~3.4"
+        },
+        "type": "library",
+        "autoload": {
+          "psr-4": {
+            "Noodlehaus\\": "src"
+          }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+          "MIT"
+        ],
+        "authors": [
+          {
+            "name": "Hassan Khan",
+            "homepage": "http://hassankhan.me/",
+            "role": "Developer"
+          }
+        ],
+        "description": "Lightweight configuration file loader that supports PHP, INI, XML, JSON, and YAML files",
+        "homepage": "http://hassankhan.me/config/",
+        "keywords": [
+          "config",
+          "configuration",
+          "ini",
+          "json",
+          "microphp",
+          "unframework",
+          "xml",
+          "yaml",
+          "yml"
+        ],
+        "time": "2019-02-01T13:58:25+00:00"
         },
       {
             "name": "monolog/monolog",
@@ -369,6 +469,112 @@
             "time": "2016-08-06T14:39:51+00:00"
         },
         {
+          "name": "psr/http-server-handler",
+          "version": "1.0.1",
+          "source": {
+            "type": "git",
+            "url": "https://github.com/php-fig/http-server-handler.git",
+            "reference": "aff2f80e33b7f026ec96bb42f63242dc50ffcae7"
+          },
+          "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/php-fig/http-server-handler/zipball/aff2f80e33b7f026ec96bb42f63242dc50ffcae7",
+            "reference": "aff2f80e33b7f026ec96bb42f63242dc50ffcae7",
+            "shasum": ""
+          },
+          "require": {
+            "php": ">=7.0",
+            "psr/http-message": "^1.0"
+          },
+          "type": "library",
+          "extra": {
+            "branch-alias": {
+              "dev-master": "1.0.x-dev"
+            }
+          },
+          "autoload": {
+            "psr-4": {
+              "Psr\\Http\\Server\\": "src/"
+            }
+          },
+          "notification-url": "https://packagist.org/downloads/",
+          "license": [
+            "MIT"
+          ],
+          "authors": [
+            {
+              "name": "PHP-FIG",
+              "homepage": "http://www.php-fig.org/"
+            }
+          ],
+          "description": "Common interface for HTTP server-side request handler",
+          "keywords": [
+            "handler",
+            "http",
+            "http-interop",
+            "psr",
+            "psr-15",
+            "psr-7",
+            "request",
+            "response",
+            "server"
+          ],
+          "time": "2018-10-30T16:46:14+00:00"
+        },
+      {
+        "name": "psr/http-server-middleware",
+        "version": "1.0.1",
+        "source": {
+          "type": "git",
+          "url": "https://github.com/php-fig/http-server-middleware.git",
+          "reference": "2296f45510945530b9dceb8bcedb5cb84d40c5f5"
+        },
+        "dist": {
+          "type": "zip",
+          "url": "https://api.github.com/repos/php-fig/http-server-middleware/zipball/2296f45510945530b9dceb8bcedb5cb84d40c5f5",
+          "reference": "2296f45510945530b9dceb8bcedb5cb84d40c5f5",
+          "shasum": ""
+        },
+        "require": {
+          "php": ">=7.0",
+          "psr/http-message": "^1.0",
+          "psr/http-server-handler": "^1.0"
+        },
+        "type": "library",
+        "extra": {
+          "branch-alias": {
+            "dev-master": "1.0.x-dev"
+          }
+        },
+        "autoload": {
+          "psr-4": {
+            "Psr\\Http\\Server\\": "src/"
+          }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+          "MIT"
+        ],
+        "authors": [
+          {
+            "name": "PHP-FIG",
+            "homepage": "http://www.php-fig.org/"
+          }
+        ],
+        "description": "Common interface for HTTP server-side middleware",
+        "keywords": [
+          "http",
+          "http-interop",
+          "middleware",
+          "psr",
+          "psr-15",
+          "psr-7",
+          "request",
+          "response"
+        ],
+        "time": "2018-10-30T17:12:04+00:00"
+      },
+      {
             "name": "psr/log",
             "version": "1.1.0",
             "source": {
