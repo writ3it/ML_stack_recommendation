@@ -3,10 +3,6 @@
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-use ITR\API;
-
-// Routes
-
 $app->get('/', function (Request $request, Response $response, array $args) {
     // Sample log message
     $this->logger->info("Slim-Skeleton '/' route");
@@ -16,14 +12,13 @@ $app->get('/', function (Request $request, Response $response, array $args) {
 });
 
 
-$app->get('/api/{version}/{module}/{resource}', function (Request $request, Response $response, array $args) {
-    extract($args);
-    /** @var string $version */
-    /** @var string $module */
-    /** @var string $resource */
-    /** @var ITR\API $api */
-    $api = new API();
-    $requestData = $request->getParsedBody() ?? [];
-    $data = $api->UseVersion($version)->UseModule($module)->UseResource($resource)->Serve($requestData);
-    return $response->withJson($data, $api->GetStatusCode());
+require_once 'base_logic.php';
+
+$app->get('/api/{version}/{module}/{resource}', 'apiController');
+$app->post('/api/{version}/{module}/{resource}', 'apiController');
+
+
+$app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], '/{routes:.+}', function ($req, $res) {
+    $handler = $this->notFoundHandler; // handle using the default Slim page not found handler
+    return $handler($req, $res);
 });

@@ -4,5 +4,9 @@ namespace ITR\Base;
 
 
 interface IResource{
-    public function Serve(array $data):array;
+    public function Serve(IResourceRequest $data): array;
+
+    public function Process(IResourceRequest $data): array;
+
+    public function SetConfiguration(\Noodlehaus\ConfigInterface $config);
 }

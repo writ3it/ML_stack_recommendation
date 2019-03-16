@@ -70,3 +70,5 @@ server/.idea/*
 
 docs/.RData
 docs/.Rhistory
+
+server/configuration.xml

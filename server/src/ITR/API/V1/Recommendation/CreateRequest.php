@@ -8,16 +8,24 @@
 
 namespace ITR\API\V1\Recommendation;
 
+use ITR\Base\IResourceRequest;
+use ITR\Resource;
+use ITR\Storage\Storage;
 
-use ITR\Base\IResource;
-
-class CreateRequest implements IResource
+class CreateRequest extends Resource
 {
 
-    public function Serve(array $data): array
+    public function Process(IResourceRequest $data): array
     {
-        return [
-            'test'=>"it's working!"
-        ];
+        $errors = $data->GetErrors();
+        $errors = array_map(function ($messages) {
+            return implode("\n", $messages);
+        }, $errors);
+        if (!$data->HasErrors()) {
+            $storage = new Storage($this->config->get('requests'));
+            $storage->Persist($data);
+        }
+        return ['has_errors' => $data->HasErrors(), 'errors' => $errors, 'success' => (!$data->HasErrors()) && $storage->IsPersisted()];
     }
+
 }

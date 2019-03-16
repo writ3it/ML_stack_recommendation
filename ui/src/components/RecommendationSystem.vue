@@ -10,154 +10,184 @@
                         Aby dać Tobie spojrzenie z lotu ptaka na nasze "ZOO" przygotowałem aplikację wykorzystującą Machine Learning do wytyczania propozycji rozwoju dla Ciebie.
                         Interesują Ciebie lepsze zarobki? Relokacja? Być może planujesz przebudować swój stack. Wypełnij formularz i&nbsp;nzamów darmowy raport!
                     </p>
-                    <v-btn color="success" @click="intro=false">Wypełnij formularz</v-btn>
+                    <v-btn color="success" @click="intro=false" v-if="!filled">Wypełnij formularz</v-btn>
+                    <div v-if="filled">
+                        <v-alert
+                                :value="true"
+                                type="success"
+                        ><h4>Wypełniłeś już formularz!</h4></v-alert>
+                    </div>
+
+
                     <p style="text-align:justify">
                         Celem projektu jest prezentacja oraz zastosowanie możliwości SVD. Więcej informacji o&nbsp;aplikacji znajdziesz  <a href="https://github.com/writ3it/ML_stack_recommendation" rel="nofollow" target="_blank">github</a>. O skuteczności raportu decyduje ilość zebranych danych oraz ich różnorodność.
                     </p>
+                    <v-alert
+                            :value="true"
+                            type="warning"
+                    >
+                        Aby dostarczyć raport potrzebujemy wiedzy, którą możemy przeanalizować. Obecnie serwery są wypełnione tylko w <strong>{{currentState}}</strong>. Dopiero po ich zapełnieniu mogą wziąć się do pracy! Jeżeli chcesz przyspieszyć proces, rozpowszechnij ten formularz.
+                    </v-alert>
 
                 </div>
 
             </v-card-title>
+
             <v-stepper v-model="step" vertical v-if="intro==false">
                 <v-stepper-step step="1" :complete="step>1">
-                    <span @click="step = 1" class="selector">Profil</span>
+                    <span @click="changeStep(1)" class="selector">Profil</span>
                 </v-stepper-step>
                 <v-stepper-content step="1">
-                    <v-layout row wrap>
-                        <v-flex xs12 d-flex>
-                            <v-text-field v-model="selected.email"
-                                      label="Adres email na który zostanie przesłany raport:"></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 d-flex>
-                            <v-select v-model="selected.reviews" :items="data.reviews"
-                                      label="Jak często bywasz na rozmowie rekrutacyjnej?"></v-select>
-                        </v-flex>
-                        <v-flex sm12>
-                            <v-select v-model="selected.age" :items="ages" label="Ile masz lat?"></v-select>
-                        </v-flex>
-                    </v-layout>
+                    <v-form ref="step_form_1" >
+                        <v-layout row wrap>
+                            <v-flex xs12 d-flex>
+                                <v-text-field v-model="selected.email"
+                                          label="Adres email na który zostanie przesłany raport:" :error-messages="errors.email" required :rules="rules.email"></v-text-field>
+                            </v-flex>
+                            <v-flex xs12 d-flex>
+                                <v-select v-model="selected.reviews" :items="data.reviews"
+                                          label="Jak często bywasz na rozmowie rekrutacyjnej?" :error-messages="errors.reviews" required :rules="rules.select"></v-select>
+                            </v-flex>
+                            <v-flex sm12>
+                                <v-select v-model="selected.age" :items="data.ages" label="Ile masz lat?" :error-messages="errors.age" required :rules="rules.select"></v-select>
+                            </v-flex>
+                            <v-flex sm12>
+                                <v-btn color="success" @click="changeStep(2)">Przejdź dalej</v-btn>
+                            </v-flex>
+                        </v-layout>
+                    </v-form>
                 </v-stepper-content>
 
                 <v-stepper-step step="2" :complete="step>2">
-                    <span @click="step = 2" class="selector">Praca</span>
+                    <span @click="changeStep(2)" class="selector">Praca</span>
                 </v-stepper-step>
                 <v-stepper-content step="2">
-                    <v-layout row wrap>
-                        <v-flex xs12>
-                            <v-autocomplete v-model="selected.country" :items="data.countries"
-                                            label="W jakim kraju programujesz?"></v-autocomplete>
-                        </v-flex>
-                        <v-flex xs12>
-                            <v-autocomplete v-model="selected.district" :items="data.polishDistricts"
-                                            label="Gdzie programujesz? (lokalizacja oddziału pracodawcy)"></v-autocomplete>
-                        </v-flex>
-                        <v-flex sm12>
-                            <v-select v-model="selected.level" :items="data.levels" label="Twoje obecne stanowisko?"></v-select>
-                        </v-flex>
-                        <v-flex sm12>
-                            <v-radio-group v-model="selected.position" label="Twoje stanowisko">
-                                <v-radio
-                                        v-for="option in data.positions"
-                                        :key="option"
-                                        :label="`${option}`"
-                                        :value="option"
-                                ></v-radio>
-                            </v-radio-group>
-                        </v-flex>
-                        <v-flex v-if="selected.position=='Inne'">
-                            <v-text-field label="Inne stanowisko - jakie?" v-model="selected.otherPosition"></v-text-field>
-                        </v-flex>
-                        <v-flex md12 hidden-sm-and-down>
-                            <v-slider v-model="sliders.sallary" @change="selected.sallary = data.sallaries[sliders.sallary]" :min="0"
-                                      :max="data.sallaries.length-1" :label="selected.sallary" ticks></v-slider>
-                        </v-flex>
-                        <v-flex md12 hidden-md-and-up>
-                            <v-select v-model="selected.sallary" :items="data.sallaries" label="Zarobki (za etat, netto) / msc"></v-select>
-                        </v-flex>
-                    </v-layout>
+                    <v-form ref="step_form_2">
+                        <v-layout row wrap>
+                            <v-flex xs12>
+                                <v-autocomplete v-model="selected.country" :items="data.countries"
+                                                label="W jakim kraju programujesz?" :error-messages="errors.country" required :rules="rules.select" ></v-autocomplete>
+                            </v-flex>
+                            <v-flex xs12 v-if="selected.country=='Polska'">
+                                <v-autocomplete v-model="selected.district" :items="data.polishDistricts"
+                                                label="Gdzie programujesz? (lokalizacja oddziału pracodawcy)" :error-messages="errors.district" :required="selected.country=='Polska'" :rules="rules.select"></v-autocomplete>
+                            </v-flex>
+                            <v-flex sm12>
+                                <v-select v-model="selected.level" :items="data.levels" label="Twoje obecne stanowisko?" :error-messages="errors.level" required :rules="rules.select"  validate-on-blur> </v-select>
+                            </v-flex>
+                            <v-flex sm12>
+                                <v-radio-group v-model="selected.position" label="Twoje stanowisko" :error-messages="errors.position" required :rules="rules.select">
+                                    <v-radio
+                                            v-for="option in data.positions"
+                                            :key="option"
+                                            :label="`${option}`"
+                                            :value="option"
+                                    ></v-radio>
+                                </v-radio-group>
+                            </v-flex>
+                            <v-flex v-if="selected.position=='Inne'" sm12>
+                                <v-text-field label="Inne stanowisko - jakie?" v-model="selected.otherPosition" :required="selected.position=='Inne'"></v-text-field>
+                            </v-flex>
+                            <v-flex>
+                                <v-select v-model="selected.salary" :items="data.salaries" label="Zarobki (za etat, netto) / msc" :error-messages="errors.salary" required :rules="rules.select"></v-select>
+                            </v-flex>
+                            <v-flex sm12>
+                                <v-btn color="success" @click="changeStep(3)">Przejdź dalej</v-btn>
+                            </v-flex>
+                        </v-layout>
+                    </v-form>
                 </v-stepper-content>
                 <v-stepper-step step="3" :complete="step>3">
-                    <span @click="step = 3" class="selector">Zwyczaje</span>
+                    <span @click="changeStep(3)" class="selector">Zwyczaje</span>
                 </v-stepper-step>
                 <v-stepper-content step="3">
-                    <v-flex md12 hidden-sm-and-down>
-                        <label>Ile czasu dziennie spędzasz przed komputerem?</label>
-                        <v-slider v-model="sliders.spentTime" @change="selected.spentTime = data.timesWithComputer[sliders.spentTime]" :min="0"
-                                  :max="data.timesWithComputer.length-1" :label="selected.spentTime" ticks ></v-slider>
-                    </v-flex>
-                    <v-flex md12 hidden-md-and-up>
-                        <v-select v-model="selected.spentTime" :items="data.timesWithComputer" label="Ile czasu dziennie spędzasz przed komputerem?"></v-select>
-                    </v-flex>
-                    <v-flex md12>
-                        <v-text-field
-                                label="Github/Bitbucket login" v-model="selected.github"
-                        ></v-text-field>
-                    </v-flex>
-                    <v-flex md12>
-                        <v-combobox v-model="selected.freeTimeHabits" :items="data.freeTimeHabits" label="Co robisz w wolnym czasie?" chips multiple deletable-chips/>
-                    </v-flex>
-                    <v-flex md12>
-                        <v-combobox v-model="selected.activities" :items="data.activities" label="Gdzie udzielasz się poza pracą?" chips multiple deletable-chips/>
-                    </v-flex>
+                    <v-form ref="step_form_3" >
+                        <v-flex>
+                            <v-select v-model="selected.spentTime" :items="data.timesWithComputer" label="Ile czasu dziennie spędzasz przed komputerem?" :error-messages="errors.spentTime"  required :rules="rules.select"></v-select>
+                        </v-flex>
+                        <!-- <v-flex md12>
+                            <v-text-field
+                                    label="Github/Bitbucket login" v-model="selected.github"
+                            ></v-text-field>
+                        </v-flex> -->
+                        <v-flex md12>
+                            <v-combobox v-model="selected.freeTimeHabits" :items="data.freeTimeHabits" label="Co robisz w wolnym czasie?" chips multiple deletable-chips :error-messages="errors.freeTimeHabits"  required :rules="rules.select"/>
+                        </v-flex>
+                        <v-flex md12>
+                            <v-combobox v-model="selected.activities" :items="data.activities" label="Gdzie udzielasz się poza pracą?" chips multiple deletable-chips :error-messages="errors.activities"  required :rules="rules.select"/>
+                        </v-flex>
+                        <v-flex sm12>
+                            <v-btn color="success" @click="changeStep(4)">Przejdź dalej</v-btn>
+                        </v-flex>
+                    </v-form>
                 </v-stepper-content>
                 <v-stepper-step step="4" :complete="step>4">
-                    <span @click="step = 4" class="selector">Doświadczenie i edukacja</span>
+                    <span @click="changeStep(4)" class="selector">Doświadczenie i edukacja</span>
                 </v-stepper-step>
                 <v-stepper-content step="4">
-
-                        <v-flex sm12>
-                            <label>Ile książek branżowych czytałeś w tym roku?</label>
-                            <v-slider v-model="selected.books" :min="0"
-                                      :max="25" :label="selected.books" ticks></v-slider>
+                    <v-form ref="step_form_4" >
+                        <v-flex>
+                            <v-select v-model="selected.articles" :items="data.articles" label="Czytasz artykuły branżowe?" :error-messages="errors.articles"  required :rules="rules.select"></v-select>
                         </v-flex>
                         <v-flex sm12>
-                            <v-select v-model="selected.articles" :items="data.articles" label="Czytasz artykuły branżowe?"></v-select>
+                            <v-select v-model="selected.mentor" :items="data.mentor" label="Czy inspirujesz się osobą, która jest Twoim 'mentorem'?" :error-messages="errors.mentor" required :rules="rules.select"></v-select>
                         </v-flex>
-                    <v-flex sm12>
-                        <v-select v-model="selected.mentor" :items="data.mentor" label="Czy inspirujesz się osobą, która jest Twoim 'mentorem'?"></v-select>
-                    </v-flex>
-                    <v-flex sm12>
-                        <v-select v-model="selected.exp" :items="data.jobExperience" label="Doświadczenie niezawodowe (od pierwszego programu do dziś)"></v-select>
-                    </v-flex>
-                    <v-flex sm12>
-                        <v-select v-model="selected.jobExp" :items="data.jobExperience" label="Doświadczenie zawodowe"></v-select>
-                    </v-flex>
-                    <v-flex sm12>
-                        <v-select v-model="selected.studies" :items="data.studies" label="Studiujesz?"></v-select>
-                    </v-flex>
-                    <v-flex sm12>
-                        <v-select v-model="selected.schools" :items="data.schools" label="Edukacja 'szkolna'"></v-select>
-                    </v-flex>
-                    <v-flex sm12>
-                        <v-combobox v-model="selected.otherEdu" :items="data.otherEdu" label="Pozostała edukacja (certyfikaty, książki, kursy itp)" chips multiple deletable-chips/>
-                    </v-flex>
+                        <v-flex sm12>
+                            <v-select v-model="selected.exp" :items="data.jobExperience" label="Doświadczenie niezawodowe (od pierwszego programu do dziś)" :error-messages="errors.exp" required :rules="rules.select"></v-select>
+                        </v-flex>
+                        <v-flex sm12>
+                            <v-select v-model="selected.jobExp" :items="data.jobExperience" label="Doświadczenie zawodowe" :error-messages="errors.jobExp" required :rules="rules.select"></v-select>
+                        </v-flex>
+                        <v-flex sm12>
+                            <v-select v-model="selected.studies" :items="data.studies" label="Studiujesz?" :error-messages="errors.studies" required :rules="rules.select"></v-select>
+                        </v-flex>
+                        <v-flex sm12>
+                            <v-select v-model="selected.schools" :items="data.schools" label="Edukacja 'szkolna'" :error-messages="errors.schools" required :rules="rules.select"></v-select>
+                        </v-flex>
+                        <v-flex sm12>
+                            <v-combobox v-model="selected.otherEdu" :items="data.otherEdu" label="Pozostała edukacja (certyfikaty, książki, kursy itp)" chips multiple deletable-chips :error-messages="errors.otherEdu" />
+                        </v-flex>
+                        <v-flex sm12>
+                            <v-btn color="success" @click="changeStep(5)">Przejdź dalej</v-btn>
+                        </v-flex>
+                    </v-form>
                 </v-stepper-content>
 
                 <v-stepper-step step="5" :complete="step>5">
-                    <span @click="step = 5" class="selector">Technologia</span>
+                    <span @click="changeStep(5)" class="selector">Technologia</span>
                 </v-stepper-step>
                 <v-stepper-content step="5">
-                    <v-flex sm12>
-                        <v-select v-model="selected.tdd" :items="data.tdd" label="Czy testujesz swój kod?"></v-select>
-                    </v-flex>
-                    <v-flex sm12>
-                        <v-combobox v-model="selected.tech" :items="data.tech" label="Które narzędzia/technologie dają Ci chleb?" chips multiple deletable-chips></v-combobox>
-                    </v-flex>
-                    <v-flex sm12>
-                        <v-combobox v-model="selected.itech" :items="data.tech" label="Które narzędzia/technologie dają Cię interesują?" chips multiple deletable-chips></v-combobox>
-                    </v-flex>
+                    <v-form ref="step_form_5" >
+                        <v-flex sm12>
+                            <v-select v-model="selected.tdd" :items="data.tdd" label="Czy testujesz swój kod?" :error-messages="errors.tdd" required :rules="rules.select"></v-select>
+                        </v-flex>
+                        <v-flex sm12>
+                            <v-combobox v-model="selected.tech" :items="data.tech" label="Które narzędzia/technologie dają Ci chleb?" chips multiple deletable-chips :error-messages="errors.tech" required :rules="rules.select"></v-combobox>
+                        </v-flex>
+                        <v-flex sm12>
+                            <v-combobox v-model="selected.itech" :items="data.tech" label="Które narzędzia/technologie Ciebie interesują?" chips multiple deletable-chips :error-messages="errors.itech" required :rules="rules.select"></v-combobox>
+                        </v-flex>
+                        <v-flex sm12>
+                            <v-btn color="success" @click="changeStep(6)">Przejdź dalej</v-btn>
+                        </v-flex>
+                    </v-form>
                 </v-stepper-content>
                 <v-stepper-step step="6" :complete="step>6">
-                    <span @click="step = 6" class="selector">Zamów raport</span>
+                    <span @click="changeStep(6)" class="selector">Zamów raport</span>
                 </v-stepper-step>
                 <v-stepper-content step="6">
                     <v-flex sm12>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque libero augue, rhoncus id aliquet vel, efficitur a nisi. Mauris at eros non erat pulvinar mattis. In consequat velit augue, ac cursus felis ullamcorper at. Ut nulla mi, elementum ac ex et, vehicula consectetur tortor. Nulla vel dolor facilisis, dapibus magna a, accumsan massa. Vivamus eget fermentum neque. Integer vitae leo sit amet leo pretium cursus. Donec et turpis et purus euismod egestas. Nulla commodo turpis vel egestas elementum. Ut gravida, massa et sodales dapibus, metus diam fermentum diam, eu faucibus erat mi eu tortor. Vivamus porta tellus eget bibendum dapibus. Quisque vitae purus in dui aliquet malesuada. Curabitur dapibus, nibh et lacinia suscipit, lectus diam ultricies sapien, non luctus nisi libero in sem. Fusce tempus purus eros, at ultrices ipsum sodales sed. Donec et suscipit massa. Curabitur at dui lacus. </p>
+                        {{ message }}
+                    </v-flex>
+                    <v-flex sm12>
+                        <p>
+                            <v-btn color="success" @click="send" large class="fullwidth">Zamów</v-btn>
+                        </p>
                     </v-flex>
                 </v-stepper-content>
 
             </v-stepper>
-
+            </v-form>
 
         </v-card>
 
@@ -172,40 +202,33 @@
         text-align:center;
         margin-top:50%;
     }
+    .fullwidth{
+        width:100%;
+    }
 </style>
 <script>
-    import * as data from "../data";
-
-    var ages = (function () {
-        var output = [];
-        for (var i = 20; i < 60; i += 5) {
-            output.push(i + " - " + (i + 4) + " lat");
-        }
-        return output;
-    })()
+    import apimap from '../api';
+    import Vue from 'vue'
+    import VueCookies from 'vue-cookies'
     export default {
         name: 'RecommendationForm',
         props: {
             msg: String
         },
+        http:{
+          root:apimap.root
+        },
         data: () => ({
             step: 1,
             intro:true,
-            sliders:{
-                age:1,
-                level:1,
-                sallary:1,
-                spentTime:1,
-                books:0
-            },
             selected: {
                 country: "Polska",
                 district: "",
-                age: ages[1],
-                level: data.levels[1],
+                age: '',
+                level: '',
                 position: "",
                 otherPosition: "",
-                sallary: data.sallaries[1],
+                salary: '',
                 spentTime:"",
                 github:"",
                 freeTimeHabits:[],
@@ -221,11 +244,68 @@
                 tdd:"",
                 tech:[],
                 itech:[],
-                email:""
+                email:"",
+                reviews:null
             },
-            data: data,
-            ages: ages
-        })
+
+            rules:{
+                email:[
+                    v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'To nie jest adres email!'
+                ],
+                select:[
+                    v => !!v || 'To pole jest wymagane.'
+                ]
+            },
+            filled: VueCookies.get('form-filled'),
+            data: {},
+            errors:{},
+            message:'',
+            currentState:''
+        }),
+        created:function(){
+            const that = this;
+            this.$http.get(apimap.form_data).then(response=>{
+                that.data = response.body;
+            });
+            this.$http.get(apimap.counter).then(response=>{
+                const y = (response.body.count / response.body.limit).toFixed(2).toString()+'%';
+                that.currentState= y;
+            });
+        },
+        methods:{
+            send:function(){
+                const that = this;
+                for (let i = 1; i<=5; i++){
+                    const key = 'step_form_'+i;
+                    if (!this.$refs[key].validate()) {
+                        this.step = i;
+                        break;
+                    }
+                }
+                this.$http.post(apimap.create_request,this.selected).then(response=>{
+                    that.errors = response.body.errors;
+                    if (response.body.has_errors){
+                        that.message = 'W formularzu są błędy. Popraw je proszę!';
+                    }
+                    if (response.body.success){
+                        that.message = 'Twój formularz został zamówiony!'
+                        VueCookies.set('form-filled',true);
+                        that.intro = true;
+                        that.filled = true;
+                    }
+                })
+            },
+            changeStep:function(step){
+                const key = 'step_form_'+this.step;
+                if (! (key in this.$refs)){
+                    this.step = step;
+                } else {
+                    if (this.$refs[key].validate()) {
+                        this.step = step;
+                    }
+                }
+            }
+        }
 
     }
 </script>
