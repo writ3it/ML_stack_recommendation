@@ -10,7 +10,7 @@
                         Aby dać Tobie spojrzenie z lotu ptaka na nasze "ZOO" przygotowałem aplikację wykorzystującą Machine Learning do wytyczania propozycji rozwoju dla Ciebie.
                         Interesują Ciebie lepsze zarobki? Relokacja? Być może planujesz przebudować swój stack. Wypełnij formularz i&nbsp;nzamów darmowy raport!
                     </p>
-                    <v-btn color="success" @click="intro=false" v-if="!filled">Wypełnij formularz</v-btn>
+                    <v-btn color="success" @click="openForm" v-if="!filled">Wypełnij formularz</v-btn>
                     <div v-if="filled">
                         <v-alert
                                 :value="true"
@@ -177,7 +177,7 @@
                 </v-stepper-step>
                 <v-stepper-content step="6">
                     <v-flex sm12>
-                        {{ message }}
+                        {{ message }} {{errors.token}}
                     </v-flex>
                     <v-flex sm12>
                         <p>
@@ -187,7 +187,6 @@
                 </v-stepper-content>
 
             </v-stepper>
-            </v-form>
 
         </v-card>
 
@@ -208,12 +207,12 @@
 </style>
 <script>
     import apimap from '../api';
-    import Vue from 'vue'
     import VueCookies from 'vue-cookies'
+
     export default {
         name: 'RecommendationForm',
         props: {
-            msg: String
+            token: String
         },
         http:{
           root:apimap.root
@@ -245,7 +244,8 @@
                 tech:[],
                 itech:[],
                 email:"",
-                reviews:null
+                reviews:null,
+                token:''
             },
 
             rules:{
@@ -264,6 +264,7 @@
         }),
         created:function(){
             const that = this;
+
             this.$http.get(apimap.form_data).then(response=>{
                 that.data = response.body;
             });
@@ -273,6 +274,10 @@
             });
         },
         methods:{
+            openForm:function(){
+                this.$emit('recaptcha-auth');
+                this.intro = false;
+            },
             send:function(){
                 const that = this;
                 for (let i = 1; i<=5; i++){
@@ -282,6 +287,7 @@
                         break;
                     }
                 }
+                this.selected.token = this.token;
                 this.$http.post(apimap.create_request,this.selected).then(response=>{
                     that.errors = response.body.errors;
                     if (response.body.has_errors){

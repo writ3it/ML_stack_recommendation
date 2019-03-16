@@ -22,4 +22,6 @@ interface IResourceRequest
     public function HasErrors(): bool;
 
     public function Configure(ConfigInterface $config);
+
+    public function GetConfig(string $key);
 }

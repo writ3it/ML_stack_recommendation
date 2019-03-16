@@ -16,6 +16,7 @@ function apiController(Request $request, Response $response, array $args)
 {
     extract($args);
     $configuration = Config::load('../configuration.xml');
+    $configuration->set('http.request', $request);
     /** @var string $version */
     /** @var string $module */
     /** @var string $resource */

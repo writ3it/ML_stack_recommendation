@@ -12,9 +12,15 @@ namespace ITR;
 use ITR\Base\IResourceRequest;
 use ITR\Validation\IInlineValidator;
 use ITR\Validation\IValidator;
+use Noodlehaus\ConfigInterface;
 
 class ResourceRequest implements IResourceRequest
 {
+    /**
+     * @var ConfigInterface
+     */
+    private $config;
+
     public function __construct()
     {
         $this->InitValidation();
@@ -40,6 +46,7 @@ class ResourceRequest implements IResourceRequest
 
     public function Configure(\Noodlehaus\ConfigInterface $config)
     {
+        $this->config = $config;
     }
 
     protected function validate(string $name, IValidator $fieldValidator, $message = "Podana wartość jest niepoprawna")
@@ -85,5 +92,10 @@ class ResourceRequest implements IResourceRequest
                 }
             }
         }
+    }
+
+    public function GetConfig(string $key)
+    {
+        return $this->config->get($key);
     }
 }
