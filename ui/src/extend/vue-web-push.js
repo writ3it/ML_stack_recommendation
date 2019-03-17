@@ -8,6 +8,7 @@ export class VueWebPush{
         const INIT = 0;
         this.worker = false;
         this.isSubscriber = false;
+        this.subscription = false;
     }
 
     RegisterWorker(workerName){
@@ -35,14 +36,15 @@ export class VueWebPush{
     }
 
     Subscribe(applicationServerPublicKey){
-        const applicationServerKey = this.urlB64ToUint8Array(applicationServerPublicKey);
+        const applicationServerKey = this.urlBase64ToUint8Array(applicationServerPublicKey);
         let that = this;
         return new Promise(function(resolve, reject) {
-            this.worker.pushManager.subscribe({
+            that.worker.pushManager.subscribe({
                 userVisibleOnly: true,
                 applicationServerKey: applicationServerKey
             }).then(function (subscription) {
                 that.isSubscriber = true;
+                that.subscription = subscription;
                 resolve(subscription);
             }).catch(function (error) {
                 that.isSubscriber = false;
@@ -56,7 +58,7 @@ export class VueWebPush{
      * @param base64String
      * @returns {Uint8Array}
      */
-    urlB64ToUint8Array(base64String) {
+    urlBase64ToUint8Array(base64String) {
         const padding = '='.repeat((4 - base64String.length % 4) % 4);
         const base64 = (base64String + padding)
             .replace(/\-/g, '+')
@@ -65,7 +67,7 @@ export class VueWebPush{
         const rawData = window.atob(base64);
         const outputArray = new Uint8Array(rawData.length);
 
-        for (let i = 0; i < rawData.length; ++i) {
+        for (var i = 0; i < rawData.length; ++i) {
             outputArray[i] = rawData.charCodeAt(i);
         }
         return outputArray;
@@ -73,6 +75,10 @@ export class VueWebPush{
 
     get IsSubscribed(){
         return this.isSubscriber;
+    }
+
+    get Subscription(){
+        return this.subscription;
     }
 
     IsSupported(){
@@ -83,9 +89,11 @@ export class VueWebPush{
         let that = this;
         return new Promise(function (resolve, reject) {
             that.worker.pushManager.getSubscription().then(function(subscription){
-                console.log(subscription);
                 that.isSubscriber = !(subscription === null);
-                if (that.isSubscriber){ resolve(); } else { reject(); }
+                if (that.isSubscriber){
+                    that.subscription = subscription;
+                    resolve();
+                } else { reject(); }
             })
         });
     }
