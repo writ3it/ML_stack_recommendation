@@ -63,6 +63,9 @@ typings/
 #webstorm
 ui/.idea/*
 server/.idea/*
+calculator/.idea/*
+
+calculator/testdata/*
 
 #data
 *.csv
