@@ -19,6 +19,7 @@ class FormData extends Resource
     {
         $generator = new FormDataGenerator($this->config->get('form.static-data.path'));
         return [
+            'serverKey' => $this->getServerKey($this->config->get('webpush.VAPID.public')),
             'countries' => $generator->GetData('countries'),
             'activities' => $generator->GetData('activities'),
             'articles' => $generator->GetData('articles_reading'),
@@ -40,7 +41,10 @@ class FormData extends Resource
         ];
     }
 
-
+    private function getServerKey($path)
+    {
+        return \file_get_contents(APPDIR . $path);
+    }
 
 
 }

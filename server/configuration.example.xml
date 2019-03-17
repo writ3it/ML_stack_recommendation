@@ -15,8 +15,13 @@
             <types>
                 <request>timestamp</request>
                 <batch>timestamp</batch>
-                <svd>email</svd>
+                <svd>webpush_id</svd>
             </types>
         </destination>
     </requests>
+    <webpush>
+        <VAPID>
+            <public>/secure/public_key.vapid</public>
+        </VAPID>
+    </webpush>
 </config>

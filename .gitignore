@@ -63,6 +63,9 @@ typings/
 #webstorm
 ui/.idea/*
 server/.idea/*
+calculator/.idea/*
+
+calculator/testdata/*
 
 #data
 *.csv
@@ -72,3 +75,5 @@ docs/.RData
 docs/.Rhistory
 
 server/configuration.xml
+
+/server/secure/*
