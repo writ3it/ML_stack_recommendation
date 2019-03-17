@@ -10,6 +10,9 @@
                         Aby dać Tobie spojrzenie z lotu ptaka na nasze "ZOO" przygotowałem aplikację wykorzystującą Machine Learning do wytyczania propozycji rozwoju dla Ciebie.
                         Interesują Ciebie lepsze zarobki? Relokacja? Być może planujesz przebudować swój stack. Wypełnij formularz i&nbsp;nzamów darmowy raport!
                     </p>
+                    <div v-if="supported">
+
+
                     <v-btn color="success" @click="openForm" v-if="!filled">Wypełnij formularz</v-btn>
                     <div v-if="filled">
                         <v-alert
@@ -18,7 +21,10 @@
                         ><h4>Wypełniłeś już formularz!</h4></v-alert>
                     </div>
 
-
+                    </div>
+                    <div v-else>
+                        <v-alert :value="true" type="error"><h3>Twoja przeglądarka nie obsługuje <br/>Web Pushes!</h3> Są one niezbędne do działania aplikacji.</v-alert>
+                    </div>
                     <p style="text-align:justify">
                         Celem projektu jest prezentacja oraz zastosowanie możliwości SVD. Więcej informacji o&nbsp;aplikacji znajdziesz  <a href="https://github.com/writ3it/ML_stack_recommendation" rel="nofollow" target="_blank">github</a>. O skuteczności raportu decyduje ilość zebranych danych oraz ich różnorodność.
                     </p>
@@ -217,6 +223,11 @@
         http:{
           root:apimap.root
         },
+        computed:{
+            isWebPushSupported:function(){
+                return this.$webpush.IsSupported();
+            }
+        },
         data: () => ({
             step: 1,
             intro:true,
@@ -260,7 +271,8 @@
             data: {},
             errors:{},
             message:'',
-            currentState:''
+            currentState:'',
+            supported:false
         }),
         created:function(){
             const that = this;
@@ -272,6 +284,9 @@
                 const y = (response.body.count / response.body.limit).toFixed(2).toString()+'%';
                 that.currentState= y;
             });
+            this.$webpush.RegisterWorker('notification.js').then(function(){
+                 that.supported = true;
+            })
         },
         methods:{
             openForm:function(){
