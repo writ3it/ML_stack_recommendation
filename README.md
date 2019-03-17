@@ -17,10 +17,12 @@ App that generates reports which contains personal recommendations of technology
 - [Slim, a micro framework for PHP](http://www.slimframework.com/)
 - [Recaptcha v3](https://developers.google.com/recaptcha/docs/v3)
 - [Respect\Validation](https://respect-validation.readthedocs.io/en/1.1/)
+- [PyWebPush](https://github.com/web-push-libs/pywebpush)
 - [hassankhan/config](https://github.com/hassankhan/config)
 - [PHPUnit](https://phpunit.de/)
 - [WebStorm](https://www.jetbrains.com/webstorm/)
 - [PhpStorm](https://www.jetbrains.com/phpstorm/)
+- [PyCharm](https://www.jetbrains.com/pycharm/)
 - [Rmarkdown](https://rmarkdown.rstudio.com/)
 - [Composer](https://getcomposer.org/)
 
