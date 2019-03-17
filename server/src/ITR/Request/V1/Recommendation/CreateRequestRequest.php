@@ -15,6 +15,7 @@ use ITR\Validation\Custom\ArrayValidator;
 use ITR\Validation\Custom\DistrictValidator;
 use ITR\Validation\Custom\OverflowValidator;
 use ITR\Validation\Custom\RecaptchaValidator;
+use ITR\Validation\Custom\SubscriptionValidator;
 use ITR\Validation\IInlineValidator;
 use ITR\Validation\Validator;
 use Noodlehaus\Config;
@@ -56,6 +57,8 @@ class CreateRequestRequest extends ResourceRequest
     public $tdd;
     public $timestamp;
     public $token;
+    public $subscription;
+    public $webpush_id;
 
 
     private $data;
@@ -95,8 +98,6 @@ class CreateRequestRequest extends ResourceRequest
         $this->validate('district',
             new Validator(v::in($districts))
         );
-
-        $this->validate('email', new Validator(v::email()), $msg = "To nie jest prawidłowy adres e-mail");
         $this->validate('exp', new Validator(v::in($this->getFormData('jobExperience'))));
         $this->validate('jobExp', new Validator(v::in($this->getFormData('jobExperience'))));
         $this->validate('freeTimeHabits', ArrayValidator::x()->SetMaxCount(100)->SetMinCount(2), "Wybierz przynajmniej 2 rzeczy");
@@ -112,6 +113,7 @@ class CreateRequestRequest extends ResourceRequest
         $this->validate('studies', new Validator(v::in($this->getFormData('studies'))));
         $this->validate('tdd', new Validator(v::in($this->getFormData('tdd'))));
         $this->validate('reviews', new Validator(v::in($this->getFormData('employee_reviews'))));
+        $this->validate('subscription', SubscriptionValidator::x(), "Musisz zezwolić na powiadomienia!");
     }
 
     private function getFormData(string $string)

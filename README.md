@@ -24,5 +24,9 @@ App that generates reports which contains personal recommendations of technology
 - [Rmarkdown](https://rmarkdown.rstudio.com/)
 - [Composer](https://getcomposer.org/)
 
+#### References
+- [Front implementation of Web Push Notifications](https://developers.google.com/web/fundamentals/codelabs/push-notifications/)
+- [Web Push API](https://www.w3.org/TR/push-api/)
+
 #### To do
 [See issues](https://github.com/writ3it/ML_stack_recommendation/issues)

@@ -72,3 +72,5 @@ docs/.RData
 docs/.Rhistory
 
 server/configuration.xml
+
+/server/secure/*
