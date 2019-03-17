@@ -20,7 +20,8 @@ export default {
     RecommendationForm
   },
   created(){
-    document.title='Rekomendacje IT | writ3it'
+    document.title='Rekomendacje IT | writ3it';
+    this.track();
   },
   data:()=>({
     recaptcha:''
@@ -31,6 +32,9 @@ export default {
       this.$recaptcha('login').then((token) => {
         that.recaptcha = token;
       })
+    },
+    track () {
+      this.$ga.page('/')
     }
   }
 }
