@@ -1,1 +1,3 @@
 pywebpush
+unittest
+numpy
